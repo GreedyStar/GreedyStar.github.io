@@ -96,6 +96,8 @@
 
 
 
+<%- partial('baidu_tongji') %>
+</%->
   <meta name="description" content="问题描述旅行商问题是图论中的一个经典问题。 假设有一个旅行商人要拜访N个城市，要求他从一个城市出发，每个城市最多拜访一次，最后要回到出发的城市，保证所选择的路径长度最短。 算法描述算法简介遗传算法（GeneticAlgorithm）是模拟达尔文生物进化论的自然选择和遗传学机理的生物进化过程的计算模型，通过模拟自然进化过程搜索最优解。遗传算法是从代表问题可能潜在的解集的一个种群（population">
 <meta name="keywords" content="遗传算法,TSP问题">
 <meta property="og:type" content="article">
@@ -423,6 +425,19 @@
           
             
             
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2019/04/10/遗传算法求解TSP问题/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/04/10/遗传算法求解TSP问题/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -554,6 +569,10 @@
 
           </div>
           
+
+  
+    <div class="comments" id="comments">
+    </div>
 
   
 
@@ -877,6 +896,36 @@
   
 
   
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'ekKjjiKBuBmHywaHTvrjaaOa-gzGzoHsz',
+    appKey: 'enW5GXtdR68oQVtLhAb65RbB',
+    placeholder: '输入评论内容...',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
 
 
   

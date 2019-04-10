@@ -96,6 +96,8 @@
 
 
 
+<%- partial('baidu_tongji') %>
+</%->
   <meta name="description" content="奋飞不辍">
 <meta property="og:type" content="website">
 <meta property="og:title" content="GreedyStar">
@@ -418,6 +420,19 @@
           
             
             
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2019/04/10/Tensorflow卷积神经网络（CNN）手写数字识别示例学习/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/04/10/Tensorflow卷积神经网络（CNN）手写数字识别示例学习/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -601,6 +616,19 @@ train-images-idx3-ub
           
             
             
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2019/04/10/遗传算法求解TSP问题/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/04/10/遗传算法求解TSP问题/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -773,6 +801,19 @@ train-images-idx3-ub
 
           
             
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2019/04/10/利用极小极大搜索和alpha-beta剪枝算法预测五子棋对弈落子/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/04/10/利用极小极大搜索和alpha-beta剪枝算法预测五子棋对弈落子/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
@@ -947,6 +988,19 @@ train-images-idx3-ub
 
           
             
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2019/04/10/A星算法求解15数码问题/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/04/10/A星算法求解15数码问题/" itemprop="commentCount"></span>
+                </a>
+              </span>
             
           
 
@@ -1324,6 +1378,36 @@ train-images-idx3-ub
   
 
   
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'ekKjjiKBuBmHywaHTvrjaaOa-gzGzoHsz',
+    appKey: 'enW5GXtdR68oQVtLhAb65RbB',
+    placeholder: '输入评论内容...',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
 
 
 

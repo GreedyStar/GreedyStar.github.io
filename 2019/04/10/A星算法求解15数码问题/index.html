@@ -96,6 +96,8 @@
 
 
 
+<%- partial('baidu_tongji') %>
+</%->
   <meta name="description" content="问题描述利用A*算法进行表1到表2的转换，要求空白块移动次数最少。 转换规则为：空白块只可以与上下左右四个方向的相邻数字交换。 算法简介A*算法是一种在图形平面上，有多个节点的路径，求出最低通过成本的算法。该算法综合了Best-First Search和Dijkstra算法的优点：在进行启发式搜索提高算法效率的同时，基于评估函数计算损失，保证找到一条最优路径。 算法能否找到最优解的关键在于评估函数">
 <meta name="keywords" content="15数码,A*算法">
 <meta property="og:type" content="article">
@@ -419,6 +421,19 @@
           
             
             
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2019/04/10/A星算法求解15数码问题/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/04/10/A星算法求解15数码问题/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -551,6 +566,10 @@
 
           </div>
           
+
+  
+    <div class="comments" id="comments">
+    </div>
 
   
 
@@ -874,6 +893,36 @@
   
 
   
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'ekKjjiKBuBmHywaHTvrjaaOa-gzGzoHsz',
+    appKey: 'enW5GXtdR68oQVtLhAb65RbB',
+    placeholder: '输入评论内容...',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
 
 
   

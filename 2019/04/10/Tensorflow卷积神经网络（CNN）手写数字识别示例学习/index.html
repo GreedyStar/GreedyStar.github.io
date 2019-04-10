@@ -96,6 +96,8 @@
 
 
 
+<%- partial('baidu_tongji') %>
+</%->
   <meta name="description" content="问题描述利用卷积神经网络将MNIST数据集的28×28像素的灰度手写数字图片识别为相应的数字。 数据描述MNIST数据集是28×28像素的灰度手写数字图片，其中数字的范围从0到9 具体如下所示（参考自Tensorflow官方文档）：    文件 内容     train-images-idx3-ubyte.gz 训练集图片，55000张训练图片, 5000张验证图片   train-labels-">
 <meta name="keywords" content="卷积神经网络,Tensorflow">
 <meta property="og:type" content="article">
@@ -422,6 +424,19 @@
           
             
             
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2019/04/10/Tensorflow卷积神经网络（CNN）手写数字识别示例学习/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/04/10/Tensorflow卷积神经网络（CNN）手写数字识别示例学习/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -601,6 +616,10 @@
 
           </div>
           
+
+  
+    <div class="comments" id="comments">
+    </div>
 
   
 
@@ -924,6 +943,36 @@
   
 
   
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'ekKjjiKBuBmHywaHTvrjaaOa-gzGzoHsz',
+    appKey: 'enW5GXtdR68oQVtLhAb65RbB',
+    placeholder: '输入评论内容...',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
 
 
   
