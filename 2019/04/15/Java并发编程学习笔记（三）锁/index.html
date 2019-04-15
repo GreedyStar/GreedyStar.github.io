@@ -111,16 +111,18 @@
 
 
 
-  <meta name="description" content="奋飞不辍">
-<meta property="og:type" content="website">
-<meta property="og:title" content="GreedyStar">
-<meta property="og:url" content="http://greedystar.com/tags/遗传算法/index.html">
+  <meta name="description" content="分类内部锁 / 显式锁内部锁通常指Synchronized锁。 显式锁通常指Lock接口实现的锁，如ReentrantLock。 公平锁 / 非公平锁一种获取锁的策略。 公平锁指按照线程申请锁的顺序获取锁。 非公平锁指不严格按照申请锁的顺序获取锁，如可按优先级获取锁，可能造成饥饿。 Synchronized 是一个典型的非公平锁。 ReentrantLock 可通过构造方法指定是否为公平锁，默认为">
+<meta name="keywords" content="Java,并发编程，锁">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java并发编程学习笔记（三）锁">
+<meta property="og:url" content="http://greedystar.com/2019/04/15/Java并发编程学习笔记（三）锁/index.html">
 <meta property="og:site_name" content="GreedyStar">
-<meta property="og:description" content="奋飞不辍">
+<meta property="og:description" content="分类内部锁 / 显式锁内部锁通常指Synchronized锁。 显式锁通常指Lock接口实现的锁，如ReentrantLock。 公平锁 / 非公平锁一种获取锁的策略。 公平锁指按照线程申请锁的顺序获取锁。 非公平锁指不严格按照申请锁的顺序获取锁，如可按优先级获取锁，可能造成饥饿。 Synchronized 是一个典型的非公平锁。 ReentrantLock 可通过构造方法指定是否为公平锁，默认为">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-04-15T13:12:42.559Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="GreedyStar">
-<meta name="twitter:description" content="奋飞不辍">
+<meta name="twitter:title" content="Java并发编程学习笔记（三）锁">
+<meta name="twitter:description" content="分类内部锁 / 显式锁内部锁通常指Synchronized锁。 显式锁通常指Lock接口实现的锁，如ReentrantLock。 公平锁 / 非公平锁一种获取锁的策略。 公平锁指按照线程申请锁的顺序获取锁。 非公平锁指不严格按照申请锁的顺序获取锁，如可按优先级获取锁，可能造成饥饿。 Synchronized 是一个典型的非公平锁。 ReentrantLock 可通过构造方法指定是否为公平锁，默认为">
 
 
 
@@ -128,7 +130,7 @@
 
   
   
-  <link rel="canonical" href="http://greedystar.com/tags/遗传算法/">
+  <link rel="canonical" href="http://greedystar.com/2019/04/15/Java并发编程学习笔记（三）锁/">
 
 
 
@@ -138,7 +140,7 @@
   };
 </script>
 
-  <title>标签: 遗传算法 | GreedyStar</title>
+  <title>Java并发编程学习笔记（三）锁 | GreedyStar</title>
   
 
 
@@ -196,7 +198,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -289,7 +291,7 @@
         
         
           
-          <li class="menu-item menu-item-tags menu-item-active">
+          <li class="menu-item menu-item-tags">
 
     
     
@@ -377,83 +379,266 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>遗传算法<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
+
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://greedystar.com/2019/04/15/Java并发编程学习笔记（三）锁/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="一颗贪婪的星">
+      <meta itemprop="description" content="奋飞不辍">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="GreedyStar">
+    </span>
+
+    
+      <header class="post-header">
+
         
-          <a class="post-title-link" href="/2019/04/10/遗传算法求解TSP问题/" itemprop="url">
-            
-              <span itemprop="name">遗传算法求解TSP问题</span>
-            
-          </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">Java并发编程学习笔记（三）锁
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-04-10T13:14:48+08:00" content="2019-04-10">
-          04-10
-        </time>
-      </div>
+              
+            
+          </h1>
+        
 
-    </header>
-  </article>
+        <div class="post-meta">
+          <span class="post-time">
 
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-15 21:01:00 / 修改时间：21:12:42" itemprop="dateCreated datePublished" datetime="2019-04-15T21:01:00+08:00">2019-04-15</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java-并发编程/" itemprop="url" rel="index"><span itemprop="name">Java - 并发编程</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2019/04/15/Java并发编程学习笔记（三）锁/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/04/15/Java并发编程学习笔记（三）锁/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="分类"><a href="#分类" class="headerlink" title="分类"></a><strong>分类</strong></h1><h2 id="内部锁-显式锁"><a href="#内部锁-显式锁" class="headerlink" title="内部锁 / 显式锁"></a><strong>内部锁 / 显式锁</strong></h2><p>内部锁通常指Synchronized锁。</p>
+<p>显式锁通常指Lock接口实现的锁，如ReentrantLock。</p>
+<h2 id="公平锁-非公平锁"><a href="#公平锁-非公平锁" class="headerlink" title="公平锁 / 非公平锁"></a><strong>公平锁 / 非公平锁</strong></h2><p>一种获取锁的策略。</p>
+<p>公平锁指按照线程申请锁的顺序获取锁。</p>
+<p>非公平锁指不严格按照申请锁的顺序获取锁，如可按优先级获取锁，可能造成饥饿。</p>
+<p>Synchronized 是一个典型的非公平锁。</p>
+<p>ReentrantLock 可通过构造方法指定是否为公平锁，默认为非公平锁。</p>
+<h2 id="可重入锁-不可重入锁"><a href="#可重入锁-不可重入锁" class="headerlink" title="可重入锁 / 不可重入锁"></a><strong>可重入锁 / 不可重入锁</strong></h2><p>可重入锁指线程可以进入它已经获取的锁守护的其他代码块。</p>
+<p>不可重入锁指当前线程执行某个方法已经获取了该锁，那么在方法中尝试再次获取锁时，就会因获取不到而被阻塞。</p>
+<p>Synchronized和ReentrantLock都是可重入锁。</p>
+<h2 id="互斥锁-读写锁"><a href="#互斥锁-读写锁" class="headerlink" title="互斥锁 / 读写锁"></a><strong>互斥锁 / 读写锁</strong></h2><p>互斥锁指一次最多只有一个线程能够占有锁，如Synchronized、ReentrantLock。</p>
+<p>读写锁指一个资源可以能够被多个读取线程访问，或被一个写入线程访问，二者不能同时进行，如ReentrantReadWriteLock。</p>
+<h2 id="乐观锁-悲观锁"><a href="#乐观锁-悲观锁" class="headerlink" title="乐观锁 / 悲观锁"></a><strong>乐观锁 / 悲观锁</strong></h2><p>非具体类型的锁，而是理解并发操作的两个角度。</p>
+<p>乐观锁认为不加锁的并发操作是可以容忍的，比如原子类，通过CAS实现原子操作。</p>
+<p>悲观锁认为不加锁的并发操作一定是不安全的，如使用内部锁或显示锁。</p>
+<h2 id="分拆锁-分离锁"><a href="#分拆锁-分离锁" class="headerlink" title="分拆锁 / 分离锁"></a><strong>分拆锁 / 分离锁</strong></h2><p>非具体类型的锁，而是一种对于锁的设计。</p>
+<p>分拆锁指当一个锁对应多个独立的的独占资源时，可以考虑为每个独占资源分配一个锁。</p>
+<p>分离锁指将一个独占资源分为N份，每份分别对应一个独占锁，如JDK1.7中ConcurrentHashMap的锁分离实现，使用了一个包含16个锁的Array，每个锁对应HashMap的1/16。</p>
+<h2 id="偏向锁-轻量级锁-重量级锁"><a href="#偏向锁-轻量级锁-重量级锁" class="headerlink" title="偏向锁 / 轻量级锁 / 重量级锁"></a><strong>偏向锁 / 轻量级锁 / 重量级锁</strong></h2><p>表示Synchronized锁的三种状态，Java5为Synchronized锁引入了锁升级策略，提高了Synchronized锁的性能，这三种锁的状态是通过对象监视器在对象头中的字段来表明的。</p>
+<p>偏向锁是指一段同步代码一直被一个线程所访问，那么该线程会自动获取锁，降低获取锁的代价。</p>
+<p>轻量级锁是指当锁是偏向锁的时候，被另一个线程所访问，偏向锁就会升级为轻量级锁，其他线程会通过自旋的形式尝试获取锁，不会阻塞，提高性能。</p>
+<p>重量级锁是指当锁为轻量级锁的时候，另一个线程虽然是自旋，但自旋不会一直持续下去，当自旋一定次数的时候，还没有获取到锁，就会进入阻塞，该锁升级为重量级锁。重量级锁会让其他申请的线程进入阻塞，性能降低。</p>
+<h2 id="自旋锁"><a href="#自旋锁" class="headerlink" title="自旋锁"></a><strong>自旋锁</strong></h2><p>自旋锁指申请获取锁的线程不会立即阻塞，而是采用循环的方式去尝试获取锁，这样的好处是减少线程上下文切换的消耗，缺点是循环会消耗CPU。</p>
+<h1 id="内部锁"><a href="#内部锁" class="headerlink" title="内部锁"></a><strong>内部锁</strong></h1><p>内部锁是由JVM管理的，我们可以通过Synchronized关键字使用内部锁。Synchronized关键字可以用来同步方法或代码块，这也分别代表着不同的同步行为。</p>
+<p><strong>同步一个对象</strong></p>
+<p>同步一个对象分为两种情况：</p>
+<p>其一，类中创建一个对象作为锁对象，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Object lock = new Object();</span><br><span class="line">public void f1() &#123;</span><br><span class="line">    synchronized (lock) &#123;</span><br><span class="line"> </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>其二，使用this指代当前对象，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public void f1() &#123;</span><br><span class="line">    synchronized (this) &#123;</span><br><span class="line"> </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在这两种情况下，当多个线程访问同一个对象的f1()方法时锁才会生效。</p>
+<p><strong>同步一个方法</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public synchronized void f2() &#123;</span><br><span class="line">    // Do something</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>与同步一个对象作用相同。</p>
+<p><strong>同步一个类</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public void f3() &#123;</span><br><span class="line">    synchronized (Sync.class) &#123;</span><br><span class="line"> </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>作用于整个类，当多个线程调用该类的不同对象的f3() 方法时也会进行同步。</p>
+<p><strong>同步一个静态方法</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public synchronized static void f4() &#123;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>静态方法为类所属，因此与同步一个类相同。</p>
+<h1 id="显示锁"><a href="#显示锁" class="headerlink" title="显示锁"></a><strong>显示锁</strong></h1><p>java.util.concurrent.locks包中的Lock接口定义了一系列显式锁操作，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public interface Lock &#123;</span><br><span class="line"> </span><br><span class="line">    void lock();</span><br><span class="line"> </span><br><span class="line">    void lockInterruptibly() throws InterruptedException;</span><br><span class="line"> </span><br><span class="line">    boolean tryLock();</span><br><span class="line"> </span><br><span class="line">    boolean tryLock(long time, TimeUnit unit) throws InterruptedException;</span><br><span class="line"> </span><br><span class="line">    void unlock();</span><br><span class="line"> </span><br><span class="line">    Condition newCondition();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>内部锁虽然使用简单，但锁的获取和释放由JVM实现，在无法获得锁时会无限等待，不能进行中断，而显式锁提供了更加灵活的方法，如可响应中断的锁获取方法，可设定超时的锁获取方法等。</p>
+<p>显式锁在使用上更加灵活，能够减小锁的粒度，但也特别需要注意将业务处理放在try代码块中，并在finally代码块中释放锁，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">public void f1() &#123;</span><br><span class="line">    lock.lock();</span><br><span class="line">    try &#123;</span><br><span class="line">        // Do something</span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">        lock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">public void f2() &#123;</span><br><span class="line">    if (lock.tryLock()) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            // Do something</span><br><span class="line">        &#125; finally &#123;</span><br><span class="line">            lock.unlock();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line"> </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h1><p>锁是Java并发编程的基础内容，对锁有一定的了解能够构建更好的并发程序，在权衡使用内部锁或显式锁时，要充分考虑使用锁的场景，内部锁由JVM实现，能满足绝大多数使用场景，但如果需要使用可中断、可定时的特性时可以考虑使用显式锁代替内部锁。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a><strong>参考资料</strong></h1><p>《Java并发编程实战》</p>
 
       
     </div>
 
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"><i class="fa fa-tag"></i> Java</a>
+          
+            <a href="/tags/并发编程，锁/" rel="tag"><i class="fa fa-tag"></i> 并发编程，锁</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/15/Java并发编程学习笔记（二）活跃度问题/" rel="next" title="Java并发编程学习笔记（二）活跃度问题">
+                <i class="fa fa-chevron-left"></i> Java并发编程学习笔记（二）活跃度问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+  </div>
 
 
           </div>
           
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
 
         </div>
         
@@ -473,8 +658,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -616,6 +810,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#分类"><span class="nav-number">1.</span> <span class="nav-text">分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#内部锁-显式锁"><span class="nav-number">1.1.</span> <span class="nav-text">内部锁 / 显式锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#公平锁-非公平锁"><span class="nav-number">1.2.</span> <span class="nav-text">公平锁 / 非公平锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可重入锁-不可重入锁"><span class="nav-number">1.3.</span> <span class="nav-text">可重入锁 / 不可重入锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#互斥锁-读写锁"><span class="nav-number">1.4.</span> <span class="nav-text">互斥锁 / 读写锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#乐观锁-悲观锁"><span class="nav-number">1.5.</span> <span class="nav-text">乐观锁 / 悲观锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分拆锁-分离锁"><span class="nav-number">1.6.</span> <span class="nav-text">分拆锁 / 分离锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#偏向锁-轻量级锁-重量级锁"><span class="nav-number">1.7.</span> <span class="nav-text">偏向锁 / 轻量级锁 / 重量级锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自旋锁"><span class="nav-number">1.8.</span> <span class="nav-text">自旋锁</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#内部锁"><span class="nav-number">2.</span> <span class="nav-text">内部锁</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#显示锁"><span class="nav-number">3.</span> <span class="nav-text">显示锁</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
@@ -767,6 +978,10 @@
 
 
   
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
 
   
 
@@ -812,6 +1027,8 @@
 
 
 
+
+  
 
 
   

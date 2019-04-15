@@ -111,24 +111,20 @@
 
 
 
-  <meta name="description" content="问题描述旅行商问题是图论中的一个经典问题。 假设有一个旅行商人要拜访N个城市，要求他从一个城市出发，每个城市最多拜访一次，最后要回到出发的城市，保证所选择的路径长度最短。 算法描述算法简介遗传算法（GeneticAlgorithm）是模拟达尔文生物进化论的自然选择和遗传学机理的生物进化过程的计算模型，通过模拟自然进化过程搜索最优解。遗传算法是从代表问题可能潜在的解集的一个种群（population">
-<meta name="keywords" content="遗传算法,TSP问题">
+  <meta name="description" content="基本概念并发和并行并发：多个计算任务在同一个CPU内核上进行时间片轮转，从宏观角度来看任务是同时进行的，而实际上多个任务是交替执行的。 并行：多个计算任务在不同的CPU内核上执行，是真正的同时执行。 进程和线程进程：具有一定独立功能的程序关于一个数据集合的一次运行活动，是一个动态概念。进程是并发执行的程序在执行过程中资源分配的基本单位。 线程：线程是进程的一部分，在一个进程中可以同时运行着多个线程">
+<meta name="keywords" content="Java,并发编程">
 <meta property="og:type" content="article">
-<meta property="og:title" content="遗传算法求解TSP问题">
-<meta property="og:url" content="http://greedystar.com/2019/04/10/遗传算法求解TSP问题/index.html">
+<meta property="og:title" content="Java并发编程学习笔记（一）基础知识">
+<meta property="og:url" content="http://greedystar.com/2019/04/15/Java并发编程学习笔记（一）基础知识/index.html">
 <meta property="og:site_name" content="GreedyStar">
-<meta property="og:description" content="问题描述旅行商问题是图论中的一个经典问题。 假设有一个旅行商人要拜访N个城市，要求他从一个城市出发，每个城市最多拜访一次，最后要回到出发的城市，保证所选择的路径长度最短。 算法描述算法简介遗传算法（GeneticAlgorithm）是模拟达尔文生物进化论的自然选择和遗传学机理的生物进化过程的计算模型，通过模拟自然进化过程搜索最优解。遗传算法是从代表问题可能潜在的解集的一个种群（population">
+<meta property="og:description" content="基本概念并发和并行并发：多个计算任务在同一个CPU内核上进行时间片轮转，从宏观角度来看任务是同时进行的，而实际上多个任务是交替执行的。 并行：多个计算任务在不同的CPU内核上执行，是真正的同时执行。 进程和线程进程：具有一定独立功能的程序关于一个数据集合的一次运行活动，是一个动态概念。进程是并发执行的程序在执行过程中资源分配的基本单位。 线程：线程是进程的一部分，在一个进程中可以同时运行着多个线程">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://greedystar.com/2019/04/10/遗传算法求解TSP问题/20180516222136605.png">
-<meta property="og:image" content="http://greedystar.com/2019/04/10/遗传算法求解TSP问题/20180516222316992.png">
-<meta property="og:image" content="http://greedystar.com/2019/04/10/遗传算法求解TSP问题/20180516231610963.png">
-<meta property="og:image" content="http://greedystar.com/2019/04/10/遗传算法求解TSP问题/20180516232018847.png">
-<meta property="og:image" content="http://greedystar.com/2019/04/10/遗传算法求解TSP问题/20180516232209988.png">
-<meta property="og:updated_time" content="2019-04-10T05:33:41.040Z">
+<meta property="og:image" content="http://greedystar.com/2019/04/15/Java并发编程学习笔记（一）基础知识/20181214094034347.png">
+<meta property="og:updated_time" content="2019-04-15T12:51:51.224Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="遗传算法求解TSP问题">
-<meta name="twitter:description" content="问题描述旅行商问题是图论中的一个经典问题。 假设有一个旅行商人要拜访N个城市，要求他从一个城市出发，每个城市最多拜访一次，最后要回到出发的城市，保证所选择的路径长度最短。 算法描述算法简介遗传算法（GeneticAlgorithm）是模拟达尔文生物进化论的自然选择和遗传学机理的生物进化过程的计算模型，通过模拟自然进化过程搜索最优解。遗传算法是从代表问题可能潜在的解集的一个种群（population">
-<meta name="twitter:image" content="http://greedystar.com/2019/04/10/遗传算法求解TSP问题/20180516222136605.png">
+<meta name="twitter:title" content="Java并发编程学习笔记（一）基础知识">
+<meta name="twitter:description" content="基本概念并发和并行并发：多个计算任务在同一个CPU内核上进行时间片轮转，从宏观角度来看任务是同时进行的，而实际上多个任务是交替执行的。 并行：多个计算任务在不同的CPU内核上执行，是真正的同时执行。 进程和线程进程：具有一定独立功能的程序关于一个数据集合的一次运行活动，是一个动态概念。进程是并发执行的程序在执行过程中资源分配的基本单位。 线程：线程是进程的一部分，在一个进程中可以同时运行着多个线程">
+<meta name="twitter:image" content="http://greedystar.com/2019/04/15/Java并发编程学习笔记（一）基础知识/20181214094034347.png">
 
 
 
@@ -136,7 +132,7 @@
 
   
   
-  <link rel="canonical" href="http://greedystar.com/2019/04/10/遗传算法求解TSP问题/">
+  <link rel="canonical" href="http://greedystar.com/2019/04/15/Java并发编程学习笔记（一）基础知识/">
 
 
 
@@ -146,7 +142,7 @@
   };
 </script>
 
-  <title>遗传算法求解TSP问题 | GreedyStar</title>
+  <title>Java并发编程学习笔记（一）基础知识 | GreedyStar</title>
   
 
 
@@ -405,7 +401,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://greedystar.com/2019/04/10/遗传算法求解TSP问题/">
+    <link itemprop="mainEntityOfPage" href="http://greedystar.com/2019/04/15/Java并发编程学习笔记（一）基础知识/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="一颗贪婪的星">
@@ -422,7 +418,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">遗传算法求解TSP问题
+          <h1 class="post-title" itemprop="name headline">Java并发编程学习笔记（一）基础知识
 
               
             
@@ -448,7 +444,7 @@
                 
               
 
-              <time title="创建时间：2019-04-10 13:14:48 / 修改时间：13:33:41" itemprop="dateCreated datePublished" datetime="2019-04-10T13:14:48+08:00">2019-04-10</time>
+              <time title="创建时间：2019-04-15 20:14:14 / 修改时间：20:51:51" itemprop="dateCreated datePublished" datetime="2019-04-15T20:14:14+08:00">2019-04-15</time>
             
 
             
@@ -470,7 +466,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/算法/" itemprop="url" rel="index"><span itemprop="name">算法</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java-并发编程/" itemprop="url" rel="index"><span itemprop="name">Java - 并发编程</span></a></span>
 
                 
                 
@@ -489,8 +485,8 @@
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/2019/04/10/遗传算法求解TSP问题/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/04/10/遗传算法求解TSP问题/" itemprop="commentCount"></span>
+                <a href="/2019/04/15/Java并发编程学习笔记（一）基础知识/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/04/15/Java并发编程学习笔记（一）基础知识/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -525,42 +521,57 @@
       
 
       
-        <h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a><strong>问题描述</strong></h1><p>旅行商问题是图论中的一个经典问题。</p>
-<p>假设有一个旅行商人要拜访N个城市，要求他从一个城市出发，每个城市最多拜访一次，最后要回到出发的城市，保证所选择的路径长度最短。</p>
-<h1 id="算法描述"><a href="#算法描述" class="headerlink" title="算法描述"></a><strong>算法描述</strong></h1><h2 id="算法简介"><a href="#算法简介" class="headerlink" title="算法简介"></a><strong>算法简介</strong></h2><p>遗传算法（GeneticAlgorithm）是模拟达尔文生物进化论的自然选择和遗传学机理的生物进化过程的计算模型，通过模拟自然进化过程搜索最优解。遗传算法是从代表问题可能潜在的解集的一个种群（population）开始的，初代种群产生之后，按照适者生存和优胜劣汰的原理，逐代（generation）演化产生出越来越好的近似解，在每一代，根据问题域中个体的适应度（fitness）大小选择个体，并借助于自然遗传学的遗传算子（genetic operators）进行组合交叉（crossover）和变异（mutation），产生出代表新的解集的种群。这个过程将导致种群像自然进化一样的后生代种群比前代更加适应于环境，末代种群中的最优个体经过解码（decoding），可以作为问题近似最优解。（摘自百度百科）。</p>
-<h2 id="遗传算子"><a href="#遗传算子" class="headerlink" title="遗传算子"></a><strong>遗传算子</strong></h2><p>遗传算法中有选择算子、交叉算子和变异算子。</p>
-<p>选择算子用于在父代种群中选择进入下一代的个体。</p>
-<p>交叉算子用于对种群中的个体两两进行交叉，有Partial-Mapped Crossover、Order Crossover、Position-based Crossover等交叉算子。</p>
-<p>变异算子用于对种群中的个体进行突变。</p>
-<h2 id="算法步骤"><a href="#算法步骤" class="headerlink" title="算法步骤"></a><strong>算法步骤</strong></h2><p>遗传算法的基本运算过程如下：</p>
-<ol>
-<li><p>初始化：设置进化代数计数器t=0、设置最大进化代数T、交叉概率、变异概率、随机生成M个个体作为初始种群P</p>
-</li>
-<li><p>个体评价：计算种群P中各个个体的适应度</p>
-</li>
-<li><p>选择运算：将选择算子作用于群体。以个体适应度为基础，选择最优个体直接遗传到下一代或通过配对交叉产生新的个体再遗传到下一代</p>
-</li>
-<li><p>交叉运算：在交叉概率的控制下，对群体中的个体两两进行交叉</p>
-</li>
-<li><p>变异运算：在变异概率的控制下，对群体中的个体两两进行变异，即对某一个体的基因进行随机调整</p>
-</li>
-<li><p>经过选择、交叉、变异运算之后得到下一代群体P1。</p>
-</li>
-</ol>
-<p>重复以上1-6，直到遗传代数为T，以进化过程中所得到的具有最大适应度个体作为最优解输出，终止计算。</p>
-<h1 id="求解说明"><a href="#求解说明" class="headerlink" title="求解说明"></a><strong>求解说明</strong></h1><h2 id="优化目标"><a href="#优化目标" class="headerlink" title="优化目标"></a><strong>优化目标</strong></h2><p>给定二维数据int[][]pos用于存储各个城市的坐标，采用欧式距离代表城市之间的距离。利用遗传算法，找到不重复遍历所有城市的路径中，所走距离最短的路径。</p>
-<h2 id="选择算子"><a href="#选择算子" class="headerlink" title="选择算子"></a><strong>选择算子</strong></h2><p>选择算子采用轮盘赌选择，以每个个体的适应度为基础，为每个个体计算累积概率。</p>
-<p><img src="/2019/04/10/遗传算法求解TSP问题/20180516222136605.png" alt></p>
-<p>个体1、2、3、4的个体适应度如上图所示。</p>
-<p>适应度计算规则：染色体代表的路径实际距离作为个体的适应度，如下（distence[x][y]表示城市x到y的距离）</p>
-<p>染色体 0 2 1 3，适应度为distence[0][2] + distence[2][1] + distence[1][3] + distence[3][0]</p>
-<p><img src="/2019/04/10/遗传算法求解TSP问题/20180516222316992.png" alt></p>
-<p>qa 表示个体a的累积概率，如上图所示个体1、2、3、4的累积概率分别为0.14、0.53、0.69、1</p>
-<p>随机生成一个0到1的浮点数f，若 qa &lt; f &lt;= qb，则个体b被选中。</p>
-<h2 id="交叉算子"><a href="#交叉算子" class="headerlink" title="交叉算子"></a><strong>交叉算子</strong></h2><p><strong>Partial-Mapped Crossover（部分映射交叉）</strong><br><img src="/2019/04/10/遗传算法求解TSP问题/20180516231610963.png" alt><br><strong>Order Crossover（顺序交叉）</strong><br><img src="/2019/04/10/遗传算法求解TSP问题/20180516232018847.png" alt><br><strong>Position-based Crossover（基于位置的交叉）</strong><br><img src="/2019/04/10/遗传算法求解TSP问题/20180516232209988.png" alt></p>
-<h2 id="变异算子"><a href="#变异算子" class="headerlink" title="变异算子"></a><strong>变异算子</strong></h2><p>变异算子随机进行多次，每次在个体基因序列中选择两个位置的基因进行交换。</p>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a><strong>参考资料</strong></h1><p><a href="https://blog.csdn.net/taonull/article/details/45972393" target="_blank" rel="noopener">用遗传算法求解TSP问题</a></p>
-<p>源码地址：<a href="https://github.com/GreedyStar/Algorithm/tree/master/Tsp" target="_blank" rel="noopener">遗传算法求解TSP问题</a>（参考自 <a href="https://blog.csdn.net/wangqiuyun/article/details/12838903" target="_blank" rel="noopener">基于遗传算法求解TSP问题（JAVA）</a>）</p>
+        <h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a><strong>基本概念</strong></h1><h2 id="并发和并行"><a href="#并发和并行" class="headerlink" title="并发和并行"></a><strong>并发和并行</strong></h2><p><strong>并发：</strong>多个计算任务在同一个CPU内核上进行时间片轮转，从宏观角度来看任务是同时进行的，而实际上多个任务是交替执行的。</p>
+<p><strong>并行：</strong>多个计算任务在不同的CPU内核上执行，是真正的同时执行。</p>
+<h2 id="进程和线程"><a href="#进程和线程" class="headerlink" title="进程和线程"></a><strong>进程和线程</strong></h2><p><strong>进程：</strong>具有一定独立功能的程序关于一个数据集合的一次运行活动，是一个动态概念。进程是并发执行的程序在执行过程中资源分配的基本单位。</p>
+<p><strong>线程：</strong>线程是进程的一部分，在一个进程中可以同时运行着多个线程，线程是CPU调度的基本单位。</p>
+<h2 id="线程状态转换"><a href="#线程状态转换" class="headerlink" title="线程状态转换"></a><strong>线程状态转换</strong></h2><p><img src="/2019/04/15/Java并发编程学习笔记（一）基础知识/20181214094034347.png" alt="算法流程图"></p>
+<p>（1）新建状态（New）：新创建了一个线程对象，尚未启动。</p>
+<p>（2）就绪状态（Runnable）：调用了start()方法。该状态的线程位于可运行线程池中，等待获取CPU的使用权。</p>
+<p>（3）运行状态（Running）：获取了CPU，执行程序代码。</p>
+<p>（4）同步阻塞状态（Blocked）：运行中的线程请求一个由其他线程占有的排他锁，则当前线程进入同步阻塞状态</p>
+<p>（5）无限等待阻塞状态（Waiting）：运行中的线程调用wait()方法，进入无限等待阻塞状态。</p>
+<p>（6）有限等待阻塞状态（Timed Waiting）：运行中的线程调用sleep()或join()方法，或者发出了I/O请求时，则线程进入有限等待阻塞状态。</p>
+<p>（7）死亡状态（Terminated）：线程执行完毕或者因产生异常而结束。</p>
+<h1 id="线程的使用"><a href="#线程的使用" class="headerlink" title="线程的使用"></a><strong>线程的使用</strong></h1><h2 id="继承Thread类"><a href="#继承Thread类" class="headerlink" title="继承Thread类"></a><strong>继承Thread类</strong></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class CustomThread extends Thread &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        // so something</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">CustomThread thread = new CustomThread();</span><br><span class="line">thread.start();</span><br></pre></td></tr></table></figure>
+<h2 id="实现Runnable接口"><a href="#实现Runnable接口" class="headerlink" title="实现Runnable接口"></a><strong>实现Runnable接口</strong></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class CustomRunnable implements Runnable &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        // so something</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Thread thread = new Thread(new CustomRunnable());</span><br><span class="line">thread.start();</span><br></pre></td></tr></table></figure>
+<h2 id="实现Callable接口"><a href="#实现Callable接口" class="headerlink" title="实现Callable接口"></a><strong>实现Callable接口</strong></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public class CustomCallable implements Callable &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public Object call() throws Exception &#123;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ExecutorService executorService = Executors.newCachedThreadPool();</span><br><span class="line">Future future = executorService.submit(new CustomCallable());</span><br><span class="line">try &#123;</span><br><span class="line">    Object o = future.get();</span><br><span class="line">&#125; catch (InterruptedException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125; catch (ExecutionException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a><strong>线程池</strong></h1><p>java.util.concurrent包中为我们提供了多钟内置线程池，我们可以通过Executors的静态工厂方法创建线程池，下面一起来看看Java内置的线程池。</p>
+<h2 id="FixedThreadPool"><a href="#FixedThreadPool" class="headerlink" title="FixedThreadPool"></a><strong>FixedThreadPool</strong></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ExecutorService fixedThreadPool = Executors.newFixedThreadPool(5);</span><br></pre></td></tr></table></figure>
+<p>创建一个定长的线程池，每当提交一个任务就会创建一个线程，直到线程数量达到池的上限。当池中所有线程都处于工作状态，此时提交一个新的任务，则该任务会添加到任务队列中，等待池中的线程可用。</p>
+<p>池中的线程会一直存在，如果某一线程由于出现异常而结束，则线程池会补充一个新的线程。</p>
+<p>适用于负载较重或可预知工作线程数量的场景。</p>
+<h2 id="CachedThreadPool"><a href="#CachedThreadPool" class="headerlink" title="CachedThreadPool"></a><strong>CachedThreadPool</strong></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ExecutorService cachedThreadPool = Executors.newCachedThreadPool();</span><br></pre></td></tr></table></figure>
+<p>创建一个可缓存的线程池，不对池的长度进行任何限制。</p>
+<p>线程默认60s未使用则被回收，当提交新任务时首先考虑复用未被回收的空闲线程，其次考虑新增线程。</p>
+<p>适用于负载较轻或短耗时异步任务的场景。</p>
+<h2 id="SingleThreadPool"><a href="#SingleThreadPool" class="headerlink" title="SingleThreadPool"></a><strong>SingleThreadPool</strong></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ExecutorService singleThreadPool = Executors.newSingleThreadExecutor();</span><br></pre></td></tr></table></figure>
+<p>创建一个单线程化的线程池，池中仅有一个的工作线程来执行任务，如果该线程由于出现异常而结束，则会创建一个新的线程。</p>
+<p>工作线程根据任务队列规定的顺序（FIFO，LIFO，Priority）来执行任务。</p>
+<p>适用于需要严格保证任务执行顺序的场景。</p>
+<h2 id="ScheduledThreadPool"><a href="#ScheduledThreadPool" class="headerlink" title="ScheduledThreadPool"></a><strong>ScheduledThreadPool</strong></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ScheduledExecutorService scheduledThreadPool = Executors.newScheduledThreadPool(5);</span><br></pre></td></tr></table></figure>
+<p>创建一个定长的线程池，可以设定任务执行的延迟时间，周期性执行任务。</p>
+<p>适用于线程周期性执行任务的场景。</p>
+<h2 id="WorkStealingPool"><a href="#WorkStealingPool" class="headerlink" title="WorkStealingPool"></a><strong>WorkStealingPool</strong></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ExecutorService workStealingPool = Executors.newWorkStealingPool();</span><br></pre></td></tr></table></figure>
+<p>WorkStealingPool底层使用了ForkJoinPool，默认使用当前可以用CPU数，可将大任务分解为多个小任务，提高CPU的利用率。</p>
+<p>适用于耗时较长的计算任务，可将任务进行分解，并行计算。</p>
+<h2 id="任务队列"><a href="#任务队列" class="headerlink" title="任务队列"></a><strong>任务队列</strong></h2><p>回到Executors的工厂方法中，我们可以看到线程池的构造方法，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public class Executors &#123;</span><br><span class="line"> </span><br><span class="line">    public static ExecutorService newFixedThreadPool(int nThreads) &#123;</span><br><span class="line">        return new ThreadPoolExecutor(nThreads, nThreads,</span><br><span class="line">                                      0L, TimeUnit.MILLISECONDS,</span><br><span class="line">                                      new LinkedBlockingQueue&lt;Runnable&gt;());</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    public static ExecutorService newSingleThreadExecutor() &#123;</span><br><span class="line">        return new FinalizableDelegatedExecutorService</span><br><span class="line">            (new ThreadPoolExecutor(1, 1,</span><br><span class="line">                                    0L, TimeUnit.MILLISECONDS,</span><br><span class="line">                                    new LinkedBlockingQueue&lt;Runnable&gt;()));</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    public static ExecutorService newCachedThreadPool() &#123;</span><br><span class="line">        return new ThreadPoolExecutor(0, Integer.MAX_VALUE,</span><br><span class="line">                                      60L, TimeUnit.SECONDS,</span><br><span class="line">                                      new SynchronousQueue&lt;Runnable&gt;());</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>FixedThreadPool和SingleThreadPool默认使用的是一个无限的LinkedBlockingQueue，当频繁提交任务时，任务数大于工作线程数，这时任务就会进入任务队列中，无限的任务队列会跟随任务的提交而增长，这样就有可能导致资源耗尽，可以使用ArrayBockingQueue、有限LinkedBlockingQueue、PriorityBlockingQueue防止资源耗尽。</p>
+<p>对于CachedThreadPool，使用了SynchronousQueue绕开队列，将任务直接交给工作线程，SynchronousQueue不是一个队列，而是一种在线程之间交换信息的机制，由于CachedThreadPool是一个无限的线程池，每提交一个任务都会复用或新建一个线程来执行任务，因此使用SynchronousQueue可以减少任务在队列中维护时放入和取出的性能消耗。</p>
+<h2 id="饱和策略"><a href="#饱和策略" class="headerlink" title="饱和策略"></a><strong>饱和策略</strong></h2><p>使用有界阻塞任务队列可能会出现任务队列满的情况，当新提交的任务不能进入任务队列时就需要一种饱和策略对任务进行管理，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 5, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue&lt;&gt;(11));</span><br><span class="line">threadPoolExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy());</span><br></pre></td></tr></table></figure>
+<p>可以通过ThreadPoolExecutor的setRejectedExecutionHandler接口设置饱和策略。Java中提供了四种饱和策略:</p>
+<p>（1）AbortPolicy：当新任务不能进入等待队列时，会抛出RejectedExecutionExecption异常，可由调用者捕获，进行相应的处理。</p>
+<p>（2）DiscardPolicy：当新任务不能进入等待队列时，会放弃这个任务。</p>
+<p>（3）DiscardOldestPolicy：当新任务不能进入等待队列时，会放弃接下来将要执行的任务，如果队列通过优先级排序，则会放弃优先级最高的任务，因此该策略不能同优先级队列同时使用。</p>
+<p>（4）CallerRunsPolicy：当新任务不能进入等待队列时，会将一些任务推回给调用者，也就是让调用者线程来执行新任务，这样就使得池线程能够追赶进度，调用者线程在执行新任务时便不会再接受其他的新任务，防止过载时急剧劣化。</p>
+<p>ThreadPoolExecutor的默认饱和策略为AbortPolicy。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h1><p>并发编程是Java中经常使用的关键技术，其中，线程池的使用尤为重要，线程池的使用也有一些需要特别注意的问题，如：</p>
+<p>（1）只有当任务彼此相互独立时，使用有限线程池或有限任务队列才是合理的；当任务相互依赖时，可以使用无限的线程池来防止线程饥饿和死锁。</p>
+<p>（2）需要特别注意在线程池中使用ThreadLocal管理数据，因为可能存在线程的复用。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a><strong>参考资料</strong></h1><p>《Java并发编程实战》</p>
+<p><a href="https://www.jianshu.com/p/135c89001b61" target="_blank" rel="noopener">五种线程池的对比与使用</a></p>
 
       
     </div>
@@ -584,9 +595,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/遗传算法/" rel="tag"><i class="fa fa-tag"></i> 遗传算法</a>
+            <a href="/tags/Java/" rel="tag"><i class="fa fa-tag"></i> Java</a>
           
-            <a href="/tags/TSP问题/" rel="tag"><i class="fa fa-tag"></i> TSP问题</a>
+            <a href="/tags/并发编程/" rel="tag"><i class="fa fa-tag"></i> 并发编程</a>
           
         </div>
       
@@ -599,8 +610,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/04/10/利用极小极大搜索和alpha-beta剪枝算法预测五子棋对弈落子/" rel="next" title="利用极小极大搜索和alpha-beta剪枝算法预测五子棋对弈落子">
-                <i class="fa fa-chevron-left"></i> 利用极小极大搜索和alpha-beta剪枝算法预测五子棋对弈落子
+              <a href="/2019/04/11/基于用户的协同过滤算法在显式、隐式反馈数据中的评估比较/" rel="next" title="基于用户的协同过滤算法在显式、隐式反馈数据中的评估比较">
+                <i class="fa fa-chevron-left"></i> 基于用户的协同过滤算法在显式、隐式反馈数据中的评估比较
               </a>
             
           </div>
@@ -609,8 +620,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/04/10/Tensorflow卷积神经网络（CNN）手写数字识别示例学习/" rel="prev" title="Tensorflow卷积神经网络（CNN）手写数字识别示例学习">
-                Tensorflow卷积神经网络（CNN）手写数字识别示例学习 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/04/15/Java并发编程学习笔记（二）活跃度问题/" rel="prev" title="Java并发编程学习笔记（二）活跃度问题">
+                Java并发编程学习笔记（二）活跃度问题 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -822,7 +833,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#问题描述"><span class="nav-number">1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#算法描述"><span class="nav-number">2.</span> <span class="nav-text">算法描述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#算法简介"><span class="nav-number">2.1.</span> <span class="nav-text">算法简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#遗传算子"><span class="nav-number">2.2.</span> <span class="nav-text">遗传算子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#算法步骤"><span class="nav-number">2.3.</span> <span class="nav-text">算法步骤</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#求解说明"><span class="nav-number">3.</span> <span class="nav-text">求解说明</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#优化目标"><span class="nav-number">3.1.</span> <span class="nav-text">优化目标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选择算子"><span class="nav-number">3.2.</span> <span class="nav-text">选择算子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#交叉算子"><span class="nav-number">3.3.</span> <span class="nav-text">交叉算子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变异算子"><span class="nav-number">3.4.</span> <span class="nav-text">变异算子</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本概念"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#并发和并行"><span class="nav-number">1.1.</span> <span class="nav-text">并发和并行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程和线程"><span class="nav-number">1.2.</span> <span class="nav-text">进程和线程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程状态转换"><span class="nav-number">1.3.</span> <span class="nav-text">线程状态转换</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程的使用"><span class="nav-number">2.</span> <span class="nav-text">线程的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#继承Thread类"><span class="nav-number">2.1.</span> <span class="nav-text">继承Thread类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现Runnable接口"><span class="nav-number">2.2.</span> <span class="nav-text">实现Runnable接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现Callable接口"><span class="nav-number">2.3.</span> <span class="nav-text">实现Callable接口</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程池"><span class="nav-number">3.</span> <span class="nav-text">线程池</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#FixedThreadPool"><span class="nav-number">3.1.</span> <span class="nav-text">FixedThreadPool</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CachedThreadPool"><span class="nav-number">3.2.</span> <span class="nav-text">CachedThreadPool</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SingleThreadPool"><span class="nav-number">3.3.</span> <span class="nav-text">SingleThreadPool</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ScheduledThreadPool"><span class="nav-number">3.4.</span> <span class="nav-text">ScheduledThreadPool</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WorkStealingPool"><span class="nav-number">3.5.</span> <span class="nav-text">WorkStealingPool</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#任务队列"><span class="nav-number">3.6.</span> <span class="nav-text">任务队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#饱和策略"><span class="nav-number">3.7.</span> <span class="nav-text">饱和策略</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
             
 
           </div>
