@@ -111,18 +111,18 @@
 
 
 
-  <meta name="description" content="欢迎来到 Generator写这个代码生成器工具的想法源自2018年3月份，当时项目组刚完成一个Java Web项目的研发工作，在整个项目过程中耗费了不少的时间来构建SpringMVC的重复性代码和Mybatis的映射文件，同时我也越来越觉得这些重复且难度不大的工作不应当充斥于整个项目周期中，于是开始在网上搜寻Java代码生成器，但看了许多都不太满意于是决定自己写一个出来。 最初的工具是带有简单U">
+  <meta name="description" content="欢迎来到 GeneratorGenerator 是一款基于数据库表生成相应Java代码的工具，代码模板使用当前主流Java框架： Spring, SpringMVC, Mybatis 组织，能够减少繁琐的重复性工作，让开发人员更专注于技术和性能，提高工作效率和编码热情。 你可以使用Generator：   根据数据库业务表生成实体类 生成包含简单的增、删、查、改操作的Mapper文件 生成Cont">
 <meta name="keywords" content="Java,开发工具,代码生成器">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Java开发工具】Generator：Java代码生成工具">
 <meta property="og:url" content="http://greedystar.com/2019/08/24/Java工具/【Java开发工具】Generator：Java代码生成工具/index.html">
 <meta property="og:site_name" content="GreedyStar">
-<meta property="og:description" content="欢迎来到 Generator写这个代码生成器工具的想法源自2018年3月份，当时项目组刚完成一个Java Web项目的研发工作，在整个项目过程中耗费了不少的时间来构建SpringMVC的重复性代码和Mybatis的映射文件，同时我也越来越觉得这些重复且难度不大的工作不应当充斥于整个项目周期中，于是开始在网上搜寻Java代码生成器，但看了许多都不太满意于是决定自己写一个出来。 最初的工具是带有简单U">
+<meta property="og:description" content="欢迎来到 GeneratorGenerator 是一款基于数据库表生成相应Java代码的工具，代码模板使用当前主流Java框架： Spring, SpringMVC, Mybatis 组织，能够减少繁琐的重复性工作，让开发人员更专注于技术和性能，提高工作效率和编码热情。 你可以使用Generator：   根据数据库业务表生成实体类 生成包含简单的增、删、查、改操作的Mapper文件 生成Cont">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-08-25T02:42:22.040Z">
+<meta property="og:updated_time" content="2019-08-26T05:14:06.544Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【Java开发工具】Generator：Java代码生成工具">
-<meta name="twitter:description" content="欢迎来到 Generator写这个代码生成器工具的想法源自2018年3月份，当时项目组刚完成一个Java Web项目的研发工作，在整个项目过程中耗费了不少的时间来构建SpringMVC的重复性代码和Mybatis的映射文件，同时我也越来越觉得这些重复且难度不大的工作不应当充斥于整个项目周期中，于是开始在网上搜寻Java代码生成器，但看了许多都不太满意于是决定自己写一个出来。 最初的工具是带有简单U">
+<meta name="twitter:description" content="欢迎来到 GeneratorGenerator 是一款基于数据库表生成相应Java代码的工具，代码模板使用当前主流Java框架： Spring, SpringMVC, Mybatis 组织，能够减少繁琐的重复性工作，让开发人员更专注于技术和性能，提高工作效率和编码热情。 你可以使用Generator：   根据数据库业务表生成实体类 生成包含简单的增、删、查、改操作的Mapper文件 生成Cont">
 
 
 
@@ -459,7 +459,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-08-25 10:42:22" itemprop="dateModified" datetime="2019-08-25T10:42:22+08:00">2019-08-25</time>
+                <time title="修改时间：2019-08-26 13:14:06" itemprop="dateModified" datetime="2019-08-26T13:14:06+08:00">2019-08-26</time>
               
             
           </span>
@@ -531,18 +531,24 @@
       
 
       
-        <h1 id="欢迎来到-Generator"><a href="#欢迎来到-Generator" class="headerlink" title="欢迎来到 Generator"></a><strong>欢迎来到 Generator</strong></h1><p>写这个代码生成器工具的想法源自2018年3月份，当时项目组刚完成一个Java Web项目的研发工作，在整个项目过程中耗费了不少的时间来构建SpringMVC的重复性代码和Mybatis的映射文件，同时我也越来越觉得这些重复且难度不大的工作不应当充斥于整个项目周期中，于是开始在网上搜寻Java代码生成器，但看了许多都不太满意于是决定自己写一个出来。</p>
-<p>最初的工具是带有简单UI的，虽然使用比较直观，但不易于集成到项目中，往往需要生成代码后再自行复制到项目目录下，这样用起来也比较繁琐，这时大概已经临近5月份了。</p>
-<p>后续参与的项目不再是传统的企业软件，于是耽搁了一阵子，工具也没有再使用，直到8月底的时候，突然想重构一下，于是便有了现在这个工具，希望能帮助到一些同学，抱拳.jpg。</p>
-<p>Generator 是一款基于数据库表生成相应Java代码的工具，代码模板使用当前主流Java框架： Spring, SpringMVC, Mybatis 组织，能够减少繁琐的重复性工作，让开发人员更专注于技术和性能，提高工作效率和编码热情。</p>
+        <h1 id="欢迎来到-Generator"><a href="#欢迎来到-Generator" class="headerlink" title="欢迎来到 Generator"></a><strong>欢迎来到 Generator</strong></h1><p>Generator 是一款基于数据库表生成相应Java代码的工具，代码模板使用当前主流Java框架： <strong>Spring, SpringMVC, Mybatis</strong> 组织，能够减少繁琐的重复性工作，让开发人员更专注于技术和性能，提高工作效率和编码热情。</p>
 <p>你可以使用Generator：</p>
+<blockquote>
 <ul>
 <li>根据数据库业务表生成实体类</li>
 <li>生成包含简单的增、删、查、改操作的Mapper文件</li>
 <li>生成Controller、Service、Dao代码</li>
-<li>具体请参考使用手册：Generator-Wiki</li>
 </ul>
-<p>项目地址：<a href="https://github.com/GreedyStar/generator" target="_blank" rel="noopener">Generator：Java代码生成工具</a>，走过路过的同学给个start吧，抱拳.jpg。</p>
+</blockquote>
+<h2 id="Release-note："><a href="#Release-note：" class="headerlink" title="Release note："></a><strong>Release note：</strong></h2><ul>
+<li>v1.0.0 框架基本功能，支持连接本地MySql数据库</li>
+<li>v1.0.1 修复默认模板文件中存在的错误</li>
+<li>v1.1.0 支持连接远程MySql、Oracle、SqlServer数据库(可配置)</li>
+<li>v1.2.0 添加列名到属性名的映射规则；代码生成任务多线程；可配置生成策略等</li>
+<li>v1.2.1 Service层添加接口和实现类的支持</li>
+</ul>
+<p>详细 Release note ：<a href="https://github.com/GreedyStar/generator/releases" target="_blank" rel="noopener">GreedyStar/generator/Releases</a></p>
+<h2 id="具体请参考使用手册-Wiki-Generator"><a href="#具体请参考使用手册-Wiki-Generator" class="headerlink" title="具体请参考使用手册 : Wiki-Generator"></a>具体请参考使用手册 : <a href="https://github.com/GreedyStar/generator/wiki" target="_blank" rel="noopener">Wiki-Generator</a></h2><p>源码地址：<a href="https://github.com/GreedyStar/generator" target="_blank" rel="noopener">Generator：Java代码生成工具</a>，走过路过的同学给个start吧，抱拳.jpg。</p>
 
       
     </div>
@@ -876,7 +882,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#欢迎来到-Generator"><span class="nav-number">1.</span> <span class="nav-text">欢迎来到 Generator</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#欢迎来到-Generator"><span class="nav-number">1.</span> <span class="nav-text">欢迎来到 Generator</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Release-note："><span class="nav-number">1.1.</span> <span class="nav-text">Release note：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#具体请参考使用手册-Wiki-Generator"><span class="nav-number">1.2.</span> <span class="nav-text">具体请参考使用手册 : Wiki-Generator</span></a></li></ol></li></ol></div>
             
 
           </div>
