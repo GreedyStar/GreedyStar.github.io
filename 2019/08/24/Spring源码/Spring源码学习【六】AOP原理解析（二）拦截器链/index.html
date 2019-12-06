@@ -416,11 +416,11 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Spring源码学习【六】AOP原理解析（二）拦截器链
+          <h3 class="post-title" itemprop="name headline">Spring源码学习【六】AOP原理解析（二）拦截器链
 
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -531,6 +531,8 @@
       
 
       
+      
+      
         <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h1><p>通过上一篇 Spring源码学习【六】AOP原理解析（一）代理对象的生成 的学习，我们知道了Spring是通过后置处理器来生成代理对象的，且获取到代理对象后会阻止原Bean的默认实例化行为，从而将代理对象提供给用户使用，并通过代理对象实现对目标对象的增强，有了这些知识储备，我们继续以JdkDynamicAopProxy为例，学习一下代理对象是如何对目标对象进行增强的。</p>
 <h1 id="源码学习"><a href="#源码学习" class="headerlink" title="源码学习"></a><strong>源码学习</strong></h1><p>回到上一篇JdkDynamicAopProxy类中，我们可以发现JdkDynamicAopProxy类实现了InvocationHandler接口，在利用Java反射机制创建代理对象的同时将传入了this对象引用，代码如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">JdkDynamicAopProxy</span> <span class="keyword">implements</span> <span class="title">AopProxy</span>, <span class="title">InvocationHandler</span>, <span class="title">Serializable</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">getProxy</span><span class="params">(@Nullable ClassLoader classLoader)</span> </span>&#123;</span><br><span class="line">        ...</span><br><span class="line">        <span class="keyword">return</span> Proxy.newProxyInstance(classLoader, proxiedInterfaces, <span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -557,6 +559,8 @@
 <p><strong>最后的最后，安利一下自己写的一个Java代码生成工具，能够方便的生成Spring、SpringMVC、Mybatis架构下的Java代码，希望能对大家有所帮助，地址：<a href="https://github.com/GreedyStar/generator" target="_blank" rel="noopener">Java代码生成器：Generator</a></strong></p>
 
       
+      
+
     </div>
 
     
@@ -838,6 +842,7 @@
             <div class="links-of-author motion-element">
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -846,9 +851,11 @@
                     
                   
                   <a href="https://github.com/GreedyStar" title="GitHub &rarr; https://github.com/GreedyStar" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                </span>
+                  <center>
+                </center></center></span>
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -857,7 +864,8 @@
                     
                   
                   <a href="https://blog.csdn.net/greedystar" title="CSDN &rarr; https://blog.csdn.net/greedystar" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>CSDN</a>
-                </span>
+                  <center>
+                </center></center></span>
               
             </div>
           

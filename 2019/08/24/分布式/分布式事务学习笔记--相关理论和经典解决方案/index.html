@@ -427,11 +427,11 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">分布式事务学习笔记--相关理论和经典解决方案
+          <h3 class="post-title" itemprop="name headline">分布式事务学习笔记--相关理论和经典解决方案
 
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -529,6 +529,8 @@
       
       
 
+      
+      
       
         <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h1><p>互联网数据井喷式发展使得单机数据库的性能遇到了瓶颈，这时我们通常会对数据库进行分区，即分库分表，在这种情况下，就需要解决分布式数据库的数据一致性问题，即分布式事务。长期以来，分布式事务都是分布式架构的系统中的一个技术难题，下面我们一起来学习一下分布式事务的相关知识。</p>
 <h1 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a><strong>相关概念</strong></h1><h2 id="ACID特性"><a href="#ACID特性" class="headerlink" title="ACID特性"></a><strong>ACID特性</strong></h2><p>首先，让我们回忆一下数据库事务的ACID特性：</p>
@@ -641,6 +643,8 @@
 <p><a href="https://www.cnblogs.com/savorboard/p/distributed-system-transaction-consistency.html" target="_blank" rel="noopener">从分布式一致性谈到CAP理论、BASE理论](https://www.cnblogs.com/szlbm/p/5588543.html)<br>聊聊分布式事务，再说说解决方案</a><br><a href="https://blog.csdn.net/u011393781/article/details/52754515" target="_blank" rel="noopener">分布式系统中数据库的事务如何处理？</a><br><a href="https://mp.weixin.qq.com/s?__biz=MzI4MTY5NTk4Ng==&amp;mid=2247489579&amp;idx=1&amp;sn=128c1ced738e205f0b9def9bc5ec6d51&amp;source=41#wechat_redirect" target="_blank" rel="noopener">分布式事务：不过是在一致性、吞吐量和复杂度之间，做一个选择</a></p>
 
       
+      
+
     </div>
 
     
@@ -687,8 +691,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/08/24/Fabric/Fabric背书策略相关概念与背书验证过程/" rel="prev" title="Fabric背书策略相关概念与背书验证过程">
-                Fabric背书策略相关概念与背书验证过程 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/08/24/Fabric/Fabric交易的共识流程/" rel="prev" title="Fabric交易的共识流程">
+                Fabric交易的共识流程 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -922,6 +926,7 @@
             <div class="links-of-author motion-element">
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -930,9 +935,11 @@
                     
                   
                   <a href="https://github.com/GreedyStar" title="GitHub &rarr; https://github.com/GreedyStar" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                </span>
+                  <center>
+                </center></center></span>
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -941,7 +948,8 @@
                     
                   
                   <a href="https://blog.csdn.net/greedystar" title="CSDN &rarr; https://blog.csdn.net/greedystar" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>CSDN</a>
-                </span>
+                  <center>
+                </center></center></span>
               
             </div>
           

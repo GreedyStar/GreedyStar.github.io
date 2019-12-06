@@ -416,11 +416,11 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Spring源码学习【五】填坑篇之PropertyValue解析
+          <h3 class="post-title" itemprop="name headline">Spring源码学习【五】填坑篇之PropertyValue解析
 
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -531,6 +531,8 @@
       
 
       
+      
+      
         <p>经过上一篇文章 Spring源码学习【四】依赖注入过程 对Spring依赖注入过程的分析，我们知道了在注入Property时会创建一个深拷贝副本，将这个副本持有的Property注入到Bean中，在创建的过程中会使用BeanDefinitionValueResolver解析PropertyValue，代码如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">BeanDefinitionValueResolver valueResolver = <span class="keyword">new</span> BeanDefinitionValueResolver(<span class="keyword">this</span>, beanName, mbd, converter);</span><br><span class="line">Object resolvedValue = valueResolver.resolveValueIfNecessary(pv, originalValue);</span><br></pre></td></tr></table></figure>
 <p>这里调用了BeanDefinitionValueResolver的resolveValueIfNecessary方法，在这个方法中，将BeanDefinition中定义的Property解析为真正的对象，代码如下：</p>
@@ -542,6 +544,8 @@
 <p><strong>最后的最后，安利一下自己写的一个Java代码生成工具，能够方便的生成Spring、SpringMVC、Mybatis架构下的Java代码，希望能对大家有所帮助，地址：<a href="https://github.com/GreedyStar/generator" target="_blank" rel="noopener">Java代码生成器：Generator</a></strong></p>
 
       
+      
+
     </div>
 
     
@@ -812,6 +816,7 @@
             <div class="links-of-author motion-element">
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -820,9 +825,11 @@
                     
                   
                   <a href="https://github.com/GreedyStar" title="GitHub &rarr; https://github.com/GreedyStar" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                </span>
+                  <center>
+                </center></center></span>
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -831,7 +838,8 @@
                     
                   
                   <a href="https://blog.csdn.net/greedystar" title="CSDN &rarr; https://blog.csdn.net/greedystar" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>CSDN</a>
-                </span>
+                  <center>
+                </center></center></span>
               
             </div>
           

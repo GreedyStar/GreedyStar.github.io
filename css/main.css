@@ -180,7 +180,7 @@ h3,
 h4,
 h5,
 h6 {
-  margin: 20px 0 15px;
+  margin: 10px 0 10px;
   padding: 0;
   font-weight: bold;
   line-height: 1.5;
@@ -271,7 +271,7 @@ h6 code {
   }
 }
 p {
-  margin: 0 0 20px 0;
+  margin: 0 0 0 0;
 }
 a,
 span.exturl {
@@ -1464,7 +1464,7 @@ pre .javascript .function {
 .posts-expand .post-title {
   overflow-wrap: break-word;
   word-wrap: break-word;
-  text-align: center;
+  text-align: left;
   font-weight: 400;
 }
 .posts-expand .post-title-link {
@@ -1500,11 +1500,11 @@ pre .javascript .function {
   margin-left: 5px;
 }
 .posts-expand .post-meta {
-  margin: 3px 0 60px 0;
+  margin: 5px 0 5px 0;
   color: #999;
   font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
   font-size: 12px;
-  text-align: center;
+  text-align: left;
 }
 .posts-expand .post-meta .post-category-list {
   display: inline-block;
@@ -1549,7 +1549,7 @@ pre .javascript .function {
   }
 }
 .post-button {
-  margin-top: 40px;
+  margin-top: 10px;
 }
 .posts-expand .post-tags {
   margin-top: 40px;
@@ -1786,7 +1786,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #c6ff0b;
+  background: #45ff6c;
 }
 .feed-link,
 .chat {
@@ -2775,7 +2775,10 @@ ul.breadcrumb li+li:last-child {
   border-radius: initial;
 }
 .post-block {
-  padding: 40px;
+  padding-left: 40px;
+  padding-top: 15px;
+  padding-right: 40px;
+  padding-bottom: 15px;
   background: #fff;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.06), 0 1px 5px 0 rgba(0,0,0,0.12);
   border-radius: initial;

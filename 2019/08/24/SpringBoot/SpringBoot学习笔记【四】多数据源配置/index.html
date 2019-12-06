@@ -418,11 +418,11 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">SpringBoot学习笔记【四】多数据源配置
+          <h3 class="post-title" itemprop="name headline">SpringBoot学习笔记【四】多数据源配置
 
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -521,6 +521,8 @@
       
 
       
+      
+      
         <h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a><strong>配置</strong></h1><p>首先，在application配置文件中添加多个数据数据源，如下：</p>
 <figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">server</span>:</span><br><span class="line">  <span class="attribute">port</span>: <span class="number">8088</span></span><br><span class="line"><span class="attribute">spring</span>:</span><br><span class="line">  <span class="attribute">datasource</span>:</span><br><span class="line">    <span class="attribute">sys</span>:</span><br><span class="line">      <span class="attribute">driver-class-name</span>: com.mysql.jdbc.Driver</span><br><span class="line">      <span class="attribute">url</span>: <span class="attribute">jdbc</span>:<span class="attribute">mysql</span>:<span class="comment">//localhost:3306/spring-boot-demo?useSSL=false&amp;useUnicode=true&amp;characterEncoding=utf8&amp;useAffectedRows=true</span></span><br><span class="line">      <span class="attribute">username</span>: root</span><br><span class="line">      <span class="attribute">password</span>:</span><br><span class="line">    <span class="attribute">fin</span>:</span><br><span class="line">      <span class="attribute">driver-class-name</span>: com.mysql.jdbc.Driver</span><br><span class="line">      <span class="attribute">url</span>: <span class="attribute">jdbc</span>:<span class="attribute">mysql</span>:<span class="comment">//localhost:3306/spring-boot-demo-1?useSSL=false&amp;useUnicode=true&amp;characterEncoding=utf8&amp;useAffectedRows=true</span></span><br><span class="line">      <span class="attribute">username</span>: root</span><br><span class="line">      <span class="attribute">password</span>:</span><br></pre></td></tr></table></figure>
 <p>这里配置了sys和fin两个数据源，分别对应spring-boot-demo和spring-boot-demo-1数据库。</p>
@@ -536,6 +538,8 @@
 <p><strong>最后的最后，安利一下自己写的一个Java代码生成工具，能够方便的生成Spring、SpringMVC、Mybatis架构下的Java代码，希望能对大家有所帮助，地址：<a href="https://github.com/GreedyStar/generator" target="_blank" rel="noopener">Java代码生成器：Generator</a></strong></p>
 
       
+      
+
     </div>
 
     
@@ -819,6 +823,7 @@
             <div class="links-of-author motion-element">
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -827,9 +832,11 @@
                     
                   
                   <a href="https://github.com/GreedyStar" title="GitHub &rarr; https://github.com/GreedyStar" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                </span>
+                  <center>
+                </center></center></span>
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -838,7 +845,8 @@
                     
                   
                   <a href="https://blog.csdn.net/greedystar" title="CSDN &rarr; https://blog.csdn.net/greedystar" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>CSDN</a>
-                </span>
+                  <center>
+                </center></center></span>
               
             </div>
           

@@ -418,11 +418,11 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Fabric交易的共识流程
+          <h3 class="post-title" itemprop="name headline">Fabric交易的共识流程
 
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -521,6 +521,8 @@
       
 
       
+      
+      
         <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a><strong>概述</strong></h1><p>Fabric中提供了Orderer排序节点，作为区块链网络的一种共识机制，提供对交易进行排序的服务。目前，Fabric已发布的版本中提供了一种基于崩溃容错（Crash Fault-Tolerant, CFT）等排序机制。这种机制是通过Kafka实现的，后续版本中会提供基于Raft共识的排序机制。本文不具体关注Orderer的实现机制，而是从整体了解一下Fabric的共识流程。</p>
 <p>在讨论Fabric的共识流程前，首先需要对Fabric的交易流程有一定的了解。Fabric中简化的交易流程如下图所示：</p>
 <p><img src="/2019/08/24/Fabric/Fabric交易的共识流程/20190326232901395.png" alt></p>
@@ -563,6 +565,8 @@
 <p>本文中没有深入的讨论Orderer排序的细节，这些细节Fabric在 A Kafka-based Ordering Service for fabric 一文中进行了详细的介绍，感兴趣的同学可以更深入的学习。</p>
 
       
+      
+
     </div>
 
     
@@ -599,8 +603,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/08/24/Fabric/Fabric背书策略相关概念与背书验证过程/" rel="next" title="Fabric背书策略相关概念与背书验证过程">
-                <i class="fa fa-chevron-left"></i> Fabric背书策略相关概念与背书验证过程
+              <a href="/2019/08/24/分布式/分布式事务学习笔记--相关理论和经典解决方案/" rel="next" title="分布式事务学习笔记--相关理论和经典解决方案">
+                <i class="fa fa-chevron-left"></i> 分布式事务学习笔记--相关理论和经典解决方案
               </a>
             
           </div>
@@ -609,8 +613,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/08/24/Fabric/Fabric ENCChaincode 账本数据AES256加密解密和签名验证/" rel="prev" title="Fabric ENCChaincode 账本数据AES256加密解密和签名验证">
-                Fabric ENCChaincode 账本数据AES256加密解密和签名验证 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/08/24/Fabric/Fabric背书策略相关概念与背书验证过程/" rel="prev" title="Fabric背书策略相关概念与背书验证过程">
+                Fabric背书策略相关概念与背书验证过程 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -844,6 +848,7 @@
             <div class="links-of-author motion-element">
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -852,9 +857,11 @@
                     
                   
                   <a href="https://github.com/GreedyStar" title="GitHub &rarr; https://github.com/GreedyStar" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                </span>
+                  <center>
+                </center></center></span>
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -863,7 +870,8 @@
                     
                   
                   <a href="https://blog.csdn.net/greedystar" title="CSDN &rarr; https://blog.csdn.net/greedystar" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>CSDN</a>
-                </span>
+                  <center>
+                </center></center></span>
               
             </div>
           

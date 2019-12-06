@@ -416,11 +416,11 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Spring源码学习【二】IOC容器的初始化（二）BeanDefinition载入
+          <h3 class="post-title" itemprop="name headline">Spring源码学习【二】IOC容器的初始化（二）BeanDefinition载入
 
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -531,6 +531,8 @@
       
 
       
+      
+      
         <h1 id="总览"><a href="#总览" class="headerlink" title="总览"></a><strong>总览</strong></h1><p>经过前一篇（Spring源码学习【二】IOC容器的初始化（一）Resource定位）的分析，我们对IOC容器的初始化过程已经有了一定的了解。IOC的初始化由refresh()方法启动，最终对Resource的载入是由XmlBeanDefinitionReader处理的。参考上一节中6.loadBeanDefinitions的分析，AbstractBeanDefinitionReader中多处调用了loadBeanDefinitions(Resource)方法，这是一个模板方法，实际由其子类XmlBeanDefinitionReader实现，并完成BeanDefinition载入的过程。</p>
 <p>BeanDefinition的载入可以分为两个过程：首先，通过documentLoader获取得到Document对象；然后，根据Spring Bean的规则解析Document得到BeanDefinition，下面从源码的角度对这个过程进行分析。</p>
 <h1 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a><strong>源码分析</strong></h1><h2 id="获取Document"><a href="#获取Document" class="headerlink" title="获取Document"></a><strong>获取Document</strong></h2><p>首先， XmlBeanDefinitionReader中重写了父类的loadBeanDefinitions(Resource)方法，这个方法就是加载BeanDefinition的入口，在这个方法中，将Resource封装成带有编码信息的EncodedResource对象。</p>
@@ -549,6 +551,8 @@
 <p><strong>最后的最后，安利一下自己写的一个Java代码生成工具，能够方便的生成Spring、SpringMVC、Mybatis架构下的Java代码，希望能对大家有所帮助，地址：<a href="https://github.com/GreedyStar/generator" target="_blank" rel="noopener">Java代码生成器：Generator</a></strong></p>
 
       
+      
+
     </div>
 
     
@@ -830,6 +834,7 @@
             <div class="links-of-author motion-element">
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -838,9 +843,11 @@
                     
                   
                   <a href="https://github.com/GreedyStar" title="GitHub &rarr; https://github.com/GreedyStar" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                </span>
+                  <center>
+                </center></center></span>
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -849,7 +856,8 @@
                     
                   
                   <a href="https://blog.csdn.net/greedystar" title="CSDN &rarr; https://blog.csdn.net/greedystar" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>CSDN</a>
-                </span>
+                  <center>
+                </center></center></span>
               
             </div>
           

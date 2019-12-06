@@ -421,11 +421,11 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">SpringCloud 入门笔记（二）Eureka服务注册中心
+          <h3 class="post-title" itemprop="name headline">SpringCloud 入门笔记（二）Eureka服务注册中心
 
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -524,6 +524,8 @@
       
 
       
+      
+      
         <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a><strong>概述</strong></h1><p>Eureka是一个服务注册中心，分为Eureka Server和Eureka Client，Server和Client均是SpringBoot应用程序，其中Client即为各个微服务，其需要向Server进行注册，并发送心跳来维护活跃，下面开始构建一个简单的Eureka服务注册环境。</p>
 <h1 id="Eureka-Server"><a href="#Eureka-Server" class="headerlink" title="Eureka Server"></a><strong>Eureka Server</strong></h1><h2 id="构建Server项目"><a href="#构建Server项目" class="headerlink" title="构建Server项目"></a><strong>构建Server项目</strong></h2><p>通过IDEA的Spring Initializr创建一个包含Eureka Server组件依赖的SpringBoot项目，如下图所示勾选Eureka Server依赖，填写项目的相关信息一路next到finish。</p>
 <p><img src="/2019/08/25/SpringCloud/SpringCloud 入门笔记（二）Eureka服务注册中心/20190403103723234.png" alt></p>
@@ -583,6 +585,8 @@
 <p><strong>最后的最后，安利一下自己写的一个Java代码生成工具，能够方便的生成Spring、SpringMVC、Mybatis架构下的Java代码，希望能对大家有所帮助，地址：<a href="https://github.com/GreedyStar/generator" target="_blank" rel="noopener">Java代码生成器：Generator</a></strong></p>
 
       
+      
+
     </div>
 
     
@@ -619,8 +623,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/08/25/SpringCloud/SpringCloud 入门笔记（四）Ribbon客户端负载均衡器/" rel="next" title="SpringCloud 入门笔记（四）Ribbon客户端负载均衡器">
-                <i class="fa fa-chevron-left"></i> SpringCloud 入门笔记（四）Ribbon客户端负载均衡器
+              <a href="/2019/08/25/SpringCloud/SpringCloud 入门笔记（一）概述/" rel="next" title="SpringCloud 入门笔记（一）概述">
+                <i class="fa fa-chevron-left"></i> SpringCloud 入门笔记（一）概述
               </a>
             
           </div>
@@ -629,8 +633,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/08/25/SpringCloud/SpringCloud 入门笔记（五）Hystrix断路器/" rel="prev" title="SpringCloud 入门笔记（五）Hystrix断路器">
-                SpringCloud 入门笔记（五）Hystrix断路器 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/08/25/SpringCloud/SpringCloud 入门笔记（三）Feign声明式HTTP调用/" rel="prev" title="SpringCloud 入门笔记（三）Feign声明式HTTP调用">
+                SpringCloud 入门笔记（三）Feign声明式HTTP调用 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -864,6 +868,7 @@
             <div class="links-of-author motion-element">
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -872,9 +877,11 @@
                     
                   
                   <a href="https://github.com/GreedyStar" title="GitHub &rarr; https://github.com/GreedyStar" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                </span>
+                  <center>
+                </center></center></span>
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -883,7 +890,8 @@
                     
                   
                   <a href="https://blog.csdn.net/greedystar" title="CSDN &rarr; https://blog.csdn.net/greedystar" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>CSDN</a>
-                </span>
+                  <center>
+                </center></center></span>
               
             </div>
           

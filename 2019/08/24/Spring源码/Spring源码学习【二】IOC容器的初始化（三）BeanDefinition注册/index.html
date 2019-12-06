@@ -416,11 +416,11 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Spring源码学习【二】IOC容器的初始化（三）BeanDefinition注册
+          <h3 class="post-title" itemprop="name headline">Spring源码学习【二】IOC容器的初始化（三）BeanDefinition注册
 
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -531,6 +531,8 @@
       
 
       
+      
+      
         <h1 id="总览"><a href="#总览" class="headerlink" title="总览"></a><strong>总览</strong></h1><p>经过以上的分析，我们知道Document中BeanDefinition的解析是在DefaultBeanDefinitionDocumentReader中进行的，让我们回到DefaultBeanDefinitionDocumentReader的processBeanDefinition方法中，继续分析BeanDefinition解析后的注册过程。在processBeanDefinition方法中，我们可以看到这样一句代码：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BeanDefinitionReaderUtils.registerBeanDefinition(bdHolder, getReaderContext().getRegistry());</span><br></pre></td></tr></table></figure>
 <p>这里的处理就是将解析得到的BeanDefinition注册到bean工厂中，下面我们来看一看具体的源码。</p>
@@ -545,6 +547,8 @@
 <p><strong>最后的最后，安利一下自己写的一个Java代码生成工具，能够方便的生成Spring、SpringMVC、Mybatis架构下的Java代码，希望能对大家有所帮助，地址：<a href="https://github.com/GreedyStar/generator" target="_blank" rel="noopener">Java代码生成器：Generator</a></strong></p>
 
       
+      
+
     </div>
 
     
@@ -826,6 +830,7 @@
             <div class="links-of-author motion-element">
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -834,9 +839,11 @@
                     
                   
                   <a href="https://github.com/GreedyStar" title="GitHub &rarr; https://github.com/GreedyStar" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                </span>
+                  <center>
+                </center></center></span>
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -845,7 +852,8 @@
                     
                   
                   <a href="https://blog.csdn.net/greedystar" title="CSDN &rarr; https://blog.csdn.net/greedystar" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>CSDN</a>
-                </span>
+                  <center>
+                </center></center></span>
               
             </div>
           

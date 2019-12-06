@@ -418,11 +418,11 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Spring源码学习【三】填坑篇之BeanDefinition的解析
+          <h3 class="post-title" itemprop="name headline">Spring源码学习【三】填坑篇之BeanDefinition的解析
 
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -533,6 +533,8 @@
       
 
       
+      
+      
         <p>在 Spring源码学习【二】IOC容器的初始化（二）BeanDefinition载入 中，我们分析了BeanDefinition的载入过程，同时也留下了这样一句注释：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// TODO：待深入学习</span></span><br><span class="line">AbstractBeanDefinition beanDefinition = parseBeanDefinitionElement(ele, beanName, con-tainingBean);</span><br></pre></td></tr></table></figure>
 <p>下面来填上这里挖下的坑，这句代码实际上是将XML的Element元素解析为具体BeanDefinition的入口，让我们回到BeanDefinitionParserDelegate类的这个方法中，代码如下：</p>
@@ -548,6 +550,8 @@
 <p><strong>最后的最后，安利一下自己写的一个Java代码生成工具，能够方便的生成Spring、SpringMVC、Mybatis架构下的Java代码，希望能对大家有所帮助，地址：<a href="https://github.com/GreedyStar/generator" target="_blank" rel="noopener">Java代码生成器：Generator</a></strong></p>
 
       
+      
+
     </div>
 
     
@@ -820,6 +824,7 @@
             <div class="links-of-author motion-element">
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -828,9 +833,11 @@
                     
                   
                   <a href="https://github.com/GreedyStar" title="GitHub &rarr; https://github.com/GreedyStar" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                </span>
+                  <center>
+                </center></center></span>
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -839,7 +846,8 @@
                     
                   
                   <a href="https://blog.csdn.net/greedystar" title="CSDN &rarr; https://blog.csdn.net/greedystar" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>CSDN</a>
-                </span>
+                  <center>
+                </center></center></span>
               
             </div>
           

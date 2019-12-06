@@ -415,13 +415,13 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h3 class="post-title" itemprop="name headline">
                 
                 
                 <a href="/2019/08/24/推荐系统/推荐系统：矩阵分解（Matrix factorization）/" class="post-title-link" itemprop="url">推荐系统：矩阵分解（Matrix factorization）</a>
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -513,17 +513,20 @@
       
 
       
+      
+      
         
           
             <p>
               问题描述给定用户 - 物品评分矩阵（下文简称评分矩阵） 如下表所示：
 
-这是一个极其稀疏的矩阵，表格中的空白项表示用户未进行评分，我们的任务
+这是一个极其稀疏的矩阵，表格中的空白项表示用户未进行评分，我们的任务就是对空白项进行评分预测。
+算法概述矩阵分解算法由奇异值分解算法（Singular Value Decomposition, SVD）演变而来，传统的奇异值分解
               ...
             </p>
           <!--noindex-->
           
-            <div class="post-button text-center">
+            <div class="post-button text-center" style="display:none">
               <a class="btn" href="/2019/08/24/推荐系统/推荐系统：矩阵分解（Matrix factorization）/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
@@ -532,6 +535,8 @@
           <!--/noindex-->
         
       
+      
+
     </div>
 
     
@@ -601,13 +606,13 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h3 class="post-title" itemprop="name headline">
                 
                 
                 <a href="/2019/04/15/Java并发编程/Java并发编程学习笔记（三）锁/" class="post-title-link" itemprop="url">Java并发编程学习笔记（三）锁</a>
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -711,17 +716,22 @@
       
 
       
+      
+      
         
           
             <p>
               分类内部锁 / 显式锁内部锁通常指Synchronized锁。
 显式锁通常指Lock接口实现的锁，如ReentrantLock。
-公平锁 /
+公平锁 / 非公平锁一种获取锁的策略。
+公平锁指按照线程申请锁的顺序获取锁。
+非公平锁指不严格按照申请锁的顺序获取锁，如可按优先级获取锁，可能造成饥饿。
+Synchron
               ...
             </p>
           <!--noindex-->
           
-            <div class="post-button text-center">
+            <div class="post-button text-center" style="display:none">
               <a class="btn" href="/2019/04/15/Java并发编程/Java并发编程学习笔记（三）锁/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
@@ -730,6 +740,8 @@
           <!--/noindex-->
         
       
+      
+
     </div>
 
     
@@ -799,13 +811,13 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h3 class="post-title" itemprop="name headline">
                 
                 
                 <a href="/2019/04/15/Java并发编程/Java并发编程学习笔记（一）基础知识/" class="post-title-link" itemprop="url">Java并发编程学习笔记（一）基础知识</a>
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -909,16 +921,19 @@
       
 
       
+      
+      
         
           
             <p>
               基本概念并发和并行并发：多个计算任务在同一个CPU内核上进行时间片轮转，从宏观角度来看任务是同时进行的，而实际上多个任务是交替执行的。
-并行
+并行：多个计算任务在不同的CPU内核上执行，是真正的同时执行。
+进程和线程进程：具有一定独立功能的程序关于一个数据集合的一次运行活动，是一个动态概念。进程是并发执行
               ...
             </p>
           <!--noindex-->
           
-            <div class="post-button text-center">
+            <div class="post-button text-center" style="display:none">
               <a class="btn" href="/2019/04/15/Java并发编程/Java并发编程学习笔记（一）基础知识/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
@@ -927,6 +942,8 @@
           <!--/noindex-->
         
       
+      
+
     </div>
 
     
@@ -996,13 +1013,13 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h3 class="post-title" itemprop="name headline">
                 
                 
                 <a href="/2019/04/15/Java并发编程/Java并发编程学习笔记（二）活跃度问题/" class="post-title-link" itemprop="url">Java并发编程学习笔记（二）活跃度问题</a>
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -1106,15 +1123,18 @@
       
 
       
+      
+      
         
           
             <p>
-              在并发编程中，我们经常通过锁来保证线程安全，但使用锁也可能会带来一系列其他的问题，如死锁等问题。我们知道Java虚拟机无法从死锁中恢复，因此
+              在并发编程中，我们经常通过锁来保证线程安全，但使用锁也可能会带来一系列其他的问题，如死锁等问题。我们知道Java虚拟机无法从死锁中恢复，因此了解死锁的发生场景能够让我们在编程过程中尽可能避免死锁的发生。
+死锁定义死锁指一组线程中的每个线程都在等待由其他线程占有的因而无法获得的资源，导致线程无法继续推
               ...
             </p>
           <!--noindex-->
           
-            <div class="post-button text-center">
+            <div class="post-button text-center" style="display:none">
               <a class="btn" href="/2019/04/15/Java并发编程/Java并发编程学习笔记（二）活跃度问题/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
@@ -1123,6 +1143,8 @@
           <!--/noindex-->
         
       
+      
+
     </div>
 
     
@@ -1192,13 +1214,13 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h3 class="post-title" itemprop="name headline">
                 
                 
                 <a href="/2019/04/11/推荐系统/基于用户的协同过滤算法在显式、隐式反馈数据中的评估比较/" class="post-title-link" itemprop="url">基于用户的协同过滤算法在显式、隐式反馈数据中的评估比较</a>
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -1290,16 +1312,18 @@
       
 
       
+      
+      
         
           
             <p>
               问题描述实现基于用户的协同过滤（UserCF）算法，以TopN的推荐方式，分别在显式和隐式反馈数据集中进行评估和比较。
-实验采用Groupl
+实验采用Grouplens团队提供的公开数据集Movielens-latest-small，包括671个用户对9125部电影的100004条评分，并将数据以6比2的比例随机分为训练
               ...
             </p>
           <!--noindex-->
           
-            <div class="post-button text-center">
+            <div class="post-button text-center" style="display:none">
               <a class="btn" href="/2019/04/11/推荐系统/基于用户的协同过滤算法在显式、隐式反馈数据中的评估比较/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
@@ -1308,6 +1332,8 @@
           <!--/noindex-->
         
       
+      
+
     </div>
 
     
@@ -1377,13 +1403,13 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h3 class="post-title" itemprop="name headline">
                 
                 
                 <a href="/2019/04/11/推荐系统/推荐系统综述：初识推荐系统/" class="post-title-link" itemprop="url">推荐系统综述：初识推荐系统</a>
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -1487,15 +1513,18 @@
       
 
       
+      
+      
         
           
             <p>
-              引言随着信息技术和互联网技术的发展，人们从信息匮乏时代步入了信息过载时代，在这种时代背景下，人们越来越难从大量的信息中找到自身感兴趣的信息，
+              引言随着信息技术和互联网技术的发展，人们从信息匮乏时代步入了信息过载时代，在这种时代背景下，人们越来越难从大量的信息中找到自身感兴趣的信息，信息也越来越难展示给可能对它感兴趣的用户，而推荐系统的任务就是连接用户和信息，创造价值。
+设想用户想买一本《Recommender Systems An Int
               ...
             </p>
           <!--noindex-->
           
-            <div class="post-button text-center">
+            <div class="post-button text-center" style="display:none">
               <a class="btn" href="/2019/04/11/推荐系统/推荐系统综述：初识推荐系统/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
@@ -1504,6 +1533,8 @@
           <!--/noindex-->
         
       
+      
+
     </div>
 
     
@@ -1573,13 +1604,13 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h3 class="post-title" itemprop="name headline">
                 
                 
                 <a href="/2019/04/10/算法/Tensorflow卷积神经网络（CNN）手写数字识别示例学习/" class="post-title-link" itemprop="url">Tensorflow卷积神经网络（CNN）手写数字识别示例学习</a>
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -1683,16 +1714,29 @@
       
 
       
+      
+      
         
           
             <p>
               问题描述利用卷积神经网络将MNIST数据集的28×28像素的灰度手写数字图片识别为相应的数字。
-数据描述MNIST数据集是28×28像素的灰
+数据描述MNIST数据集是28×28像素的灰度手写数字图片，其中数字的范围从0到9
+具体如下所示（参考自Tensorflow官方文档）：
+
+
+
+文件
+内容
+
+
+
+
+train-images-idx3-ub
               ...
             </p>
           <!--noindex-->
           
-            <div class="post-button text-center">
+            <div class="post-button text-center" style="display:none">
               <a class="btn" href="/2019/04/10/算法/Tensorflow卷积神经网络（CNN）手写数字识别示例学习/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
@@ -1701,6 +1745,8 @@
           <!--/noindex-->
         
       
+      
+
     </div>
 
     
@@ -1770,13 +1816,13 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h3 class="post-title" itemprop="name headline">
                 
                 
                 <a href="/2019/04/10/算法/遗传算法求解TSP问题/" class="post-title-link" itemprop="url">遗传算法求解TSP问题</a>
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -1880,16 +1926,19 @@
       
 
       
+      
+      
         
           
             <p>
               问题描述旅行商问题是图论中的一个经典问题。
-假设有一个旅行商人要拜访N个城市，要求他从一个城市出发，每个城市最多拜访一次，最后要回到出发的城
+假设有一个旅行商人要拜访N个城市，要求他从一个城市出发，每个城市最多拜访一次，最后要回到出发的城市，保证所选择的路径长度最短。
+算法描述算法简介遗传算法（GeneticAlgorithm）是模拟达尔文生物进化论的自然选择和遗传学机理的生物进化过程的计算模型
               ...
             </p>
           <!--noindex-->
           
-            <div class="post-button text-center">
+            <div class="post-button text-center" style="display:none">
               <a class="btn" href="/2019/04/10/算法/遗传算法求解TSP问题/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
@@ -1898,6 +1947,8 @@
           <!--/noindex-->
         
       
+      
+
     </div>
 
     
@@ -1967,13 +2018,13 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h3 class="post-title" itemprop="name headline">
                 
                 
                 <a href="/2019/04/10/算法/利用极小极大搜索和alpha-beta剪枝算法预测五子棋对弈落子/" class="post-title-link" itemprop="url">利用极小极大搜索和alpha-beta剪枝算法预测五子棋对弈落子</a>
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -2077,17 +2128,20 @@
       
 
       
+      
+      
         
           
             <p>
               问题描述利用极小极大搜索和alpha-beta剪枝算法预测五子棋落子问题，初始棋局如图所示，AI为白子，玩家为黑子，当前由AI落子。
 
-算法
+算法描述极小化极大算法极小化极大搜索是一种在有限的深度范围内搜索博弈树的求解方法，程序代表AI方MAX节点，目的是打败玩家，基本原理为：
+（1）轮到MIN落子时，M
               ...
             </p>
           <!--noindex-->
           
-            <div class="post-button text-center">
+            <div class="post-button text-center" style="display:none">
               <a class="btn" href="/2019/04/10/算法/利用极小极大搜索和alpha-beta剪枝算法预测五子棋对弈落子/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
@@ -2096,6 +2150,8 @@
           <!--/noindex-->
         
       
+      
+
     </div>
 
     
@@ -2165,13 +2221,13 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h3 class="post-title" itemprop="name headline">
                 
                 
                 <a href="/2019/04/10/算法/A星算法求解15数码问题/" class="post-title-link" itemprop="url">A*算法求解15数码问题</a>
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -2275,17 +2331,19 @@
       
 
       
+      
+      
         
           
             <p>
               问题描述利用A*算法进行表1到表2的转换，要求空白块移动次数最少。
 转换规则为：空白块只可以与上下左右四个方向的相邻数字交换。
-算法简介A*
+算法简介A*算法是一种在图形平面上，有多个节点的路径，求出最低通过成本的算法。该算法综合了Best-First Search和Dijkstra算法的优点：在进行启发式搜索提
               ...
             </p>
           <!--noindex-->
           
-            <div class="post-button text-center">
+            <div class="post-button text-center" style="display:none">
               <a class="btn" href="/2019/04/10/算法/A星算法求解15数码问题/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
@@ -2294,6 +2352,8 @@
           <!--/noindex-->
         
       
+      
+
     </div>
 
     
@@ -2537,6 +2597,7 @@
             <div class="links-of-author motion-element">
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -2545,9 +2606,11 @@
                     
                   
                   <a href="https://github.com/GreedyStar" title="GitHub &rarr; https://github.com/GreedyStar" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                </span>
+                  <center>
+                </center></center></span>
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -2556,7 +2619,8 @@
                     
                   
                   <a href="https://blog.csdn.net/greedystar" title="CSDN &rarr; https://blog.csdn.net/greedystar" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>CSDN</a>
-                </span>
+                  <center>
+                </center></center></span>
               
             </div>
           

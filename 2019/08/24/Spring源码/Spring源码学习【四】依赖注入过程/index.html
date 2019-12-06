@@ -418,11 +418,11 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Spring源码学习【四】依赖注入过程
+          <h3 class="post-title" itemprop="name headline">Spring源码学习【四】依赖注入过程
 
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -533,6 +533,8 @@
       
 
       
+      
+      
         <h1 id="总览"><a href="#总览" class="headerlink" title="总览"></a><strong>总览</strong></h1><p>通过前面的分析，我们知道了IOC容器在初始化过程中建立了BeanDefinition的数据结构，接下来就需要进行依赖注入，处理Bean之间的依赖关系。</p>
 <p>通常，我们可以通过lazy-init属性控制Bean的实例化（依赖注入）时机。</p>
 <p>当lazy-init=true时，依赖注入会发生在第一次向容器获取Bean时（getBean）；当lazy-init=false时，会在容器初始化的过程中将所有的singleton bean提前进行实例化和依赖注入，因此singleton bean的依赖注入是容器初始化过程的一部分，这也是我们常用的ApplicationContext的默认配置。</p>
@@ -573,6 +575,8 @@
 <p><strong>最后的最后，安利一下自己写的一个Java代码生成工具，能够方便的生成Spring、SpringMVC、Mybatis架构下的Java代码，希望能对大家有所帮助，地址：<a href="https://github.com/GreedyStar/generator" target="_blank" rel="noopener">Java代码生成器：Generator</a></strong></p>
 
       
+      
+
     </div>
 
     
@@ -854,6 +858,7 @@
             <div class="links-of-author motion-element">
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -862,9 +867,11 @@
                     
                   
                   <a href="https://github.com/GreedyStar" title="GitHub &rarr; https://github.com/GreedyStar" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                </span>
+                  <center>
+                </center></center></span>
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -873,7 +880,8 @@
                     
                   
                   <a href="https://blog.csdn.net/greedystar" title="CSDN &rarr; https://blog.csdn.net/greedystar" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>CSDN</a>
-                </span>
+                  <center>
+                </center></center></span>
               
             </div>
           

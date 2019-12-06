@@ -419,11 +419,11 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">SpringBoot学习笔记【三】整合 Security + JWT + 异常处理
+          <h3 class="post-title" itemprop="name headline">SpringBoot学习笔记【三】整合 Security + JWT + 异常处理
 
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -522,6 +522,8 @@
       
 
       
+      
+      
         <h1 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a><strong>添加依赖</strong></h1><p>Spring Security是后台开发中经常使用的身份认证和访问权限控制框架，集成起来十分简单，对Restful接口的支持也比较完备，至于更多的介绍，可以参考 <a href="https://springcloud.cc/spring-security-zhcn.html" target="_blank" rel="noopener">Spring Security 参考手册</a>，在pom.xml中添加依赖如下：</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-security<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>JWT（Json Web Token）定义了一种简洁的，自包含的信息传递规范，在目前前后端分离的架构环境下使用十分频繁，但JWT也存在一定的局限性，在具体的业务场景下通常无法直接代替通常意义上的session，带着学习的目的，我们可以尝试一下简单的使用，详细介绍可以参考 <a href="https://jwt.io/introduction/" target="_blank" rel="noopener">JWT介绍</a>，在pom.xml中添加依赖如下：</p>
@@ -591,6 +593,8 @@
 <p><strong>最后的最后，安利一下自己写的一个Java代码生成工具，能够方便的生成Spring、SpringMVC、Mybatis架构下的Java代码，希望能对大家有所帮助，地址：<a href="https://github.com/GreedyStar/generator" target="_blank" rel="noopener">Java代码生成器：Generator</a></strong></p>
 
       
+      
+
     </div>
 
     
@@ -874,6 +878,7 @@
             <div class="links-of-author motion-element">
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -882,9 +887,11 @@
                     
                   
                   <a href="https://github.com/GreedyStar" title="GitHub &rarr; https://github.com/GreedyStar" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                </span>
+                  <center>
+                </center></center></span>
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -893,7 +900,8 @@
                     
                   
                   <a href="https://blog.csdn.net/greedystar" title="CSDN &rarr; https://blog.csdn.net/greedystar" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>CSDN</a>
-                </span>
+                  <center>
+                </center></center></span>
               
             </div>
           

@@ -420,11 +420,11 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Spring源码学习【二】IOC容器的初始化（一）Resource定位
+          <h3 class="post-title" itemprop="name headline">Spring源码学习【二】IOC容器的初始化（一）Resource定位
 
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -535,6 +535,8 @@
       
 
       
+      
+      
         <h1 id="总览"><a href="#总览" class="headerlink" title="总览"></a><strong>总览</strong></h1><p>在使用IOC容器之前，需要定义一个Resource来定位容器BeanDefinition的资源文件，Resource类继承关系如下图所示，参考使用XmlBeanFactory 和DefaultListableBeanFactory两个IOC容器时，均使用了ClassPathRescource作为BeanDefinition数据源，如下所示：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ClassPathResource resource = <span class="keyword">new</span> ClassPathResource(<span class="string">"beans.xml"</span>);</span><br></pre></td></tr></table></figure>
 <p><img src="/2019/08/24/Spring源码/Spring源码学习【二】IOC容器的初始化（一）Resource定位/20180724153517670.png" alt></p>
@@ -568,6 +570,8 @@
 <p><strong>最后的最后，安利一下自己写的一个Java代码生成工具，能够方便的生成Spring、SpringMVC、Mybatis架构下的Java代码，希望能对大家有所帮助，地址：<a href="https://github.com/GreedyStar/generator" target="_blank" rel="noopener">Java代码生成器：Generator</a></strong></p>
 
       
+      
+
     </div>
 
     
@@ -849,6 +853,7 @@
             <div class="links-of-author motion-element">
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -857,9 +862,11 @@
                     
                   
                   <a href="https://github.com/GreedyStar" title="GitHub &rarr; https://github.com/GreedyStar" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                </span>
+                  <center>
+                </center></center></span>
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -868,7 +875,8 @@
                     
                   
                   <a href="https://blog.csdn.net/greedystar" title="CSDN &rarr; https://blog.csdn.net/greedystar" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>CSDN</a>
-                </span>
+                  <center>
+                </center></center></span>
               
             </div>
           

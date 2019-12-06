@@ -416,11 +416,11 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">SpringCloud 入门笔记（五）Hystrix断路器
+          <h3 class="post-title" itemprop="name headline">SpringCloud 入门笔记（五）Hystrix断路器
 
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -519,6 +519,8 @@
       
 
       
+      
+      
         <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a><strong>概述</strong></h1><p>微服务架构的系统中通常会包含很多个服务，服务间采用HTTP通信，当某个微服务不可用时，很容易导致级联故障，即雪崩效应，因此在服务间进行调用时，需要一定的容错机制，Hystrix就是一个实现了调用超时和断路器的容错组件。</p>
 <p>Feign中已经集成了Hystrix，本篇以user-ms为例，添加对role-ms调用的熔断处理。</p>
 <h1 id="Hystrix配置"><a href="#Hystrix配置" class="headerlink" title="Hystrix配置"></a><strong>Hystrix配置</strong></h1><p>修改user-ms配置文件，添加如下配置，启用feign下的hystrix：</p>
@@ -539,6 +541,8 @@
 <p><strong>最后的最后，安利一下自己写的一个Java代码生成工具，能够方便的生成Spring、SpringMVC、Mybatis架构下的Java代码，希望能对大家有所帮助，地址：<a href="https://github.com/GreedyStar/generator" target="_blank" rel="noopener">Java代码生成器：Generator</a></strong></p>
 
       
+      
+
     </div>
 
     
@@ -575,8 +579,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/08/25/SpringCloud/SpringCloud 入门笔记（二）Eureka服务注册中心/" rel="next" title="SpringCloud 入门笔记（二）Eureka服务注册中心">
-                <i class="fa fa-chevron-left"></i> SpringCloud 入门笔记（二）Eureka服务注册中心
+              <a href="/2019/08/25/SpringCloud/SpringCloud 入门笔记（四）Ribbon客户端负载均衡器/" rel="next" title="SpringCloud 入门笔记（四）Ribbon客户端负载均衡器">
+                <i class="fa fa-chevron-left"></i> SpringCloud 入门笔记（四）Ribbon客户端负载均衡器
               </a>
             
           </div>
@@ -820,6 +824,7 @@
             <div class="links-of-author motion-element">
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -828,9 +833,11 @@
                     
                   
                   <a href="https://github.com/GreedyStar" title="GitHub &rarr; https://github.com/GreedyStar" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                </span>
+                  <center>
+                </center></center></span>
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -839,7 +846,8 @@
                     
                   
                   <a href="https://blog.csdn.net/greedystar" title="CSDN &rarr; https://blog.csdn.net/greedystar" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>CSDN</a>
-                </span>
+                  <center>
+                </center></center></span>
               
             </div>
           

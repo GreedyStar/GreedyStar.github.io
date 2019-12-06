@@ -415,13 +415,13 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h3 class="post-title" itemprop="name headline">
                 
                 
                 <a href="/2019/08/24/Spring源码/Spring源码学习【七】Web环境中启动和关闭IOC容器/" class="post-title-link" itemprop="url">Spring源码学习【七】Web环境中启动和关闭IOC容器</a>
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -525,15 +525,18 @@
       
 
       
+      
+      
         
           
             <p>
-              前言前面的几章中学习了Spring IOC容器和AOP的实现，对这两个核心功能有了一定了解后，让我们一起学习一下IOC容器在常用的Web环境
+              前言前面的几章中学习了Spring IOC容器和AOP的实现，对这两个核心功能有了一定了解后，让我们一起学习一下IOC容器在常用的Web环境中是如何使用的，这也是Spring框架在Web环境中的重要应用场景。
+回忆一下在Web项目中配置Spring的过程，首先，我们需要在web.xml中进行如下配置
               ...
             </p>
           <!--noindex-->
           
-            <div class="post-button text-center">
+            <div class="post-button text-center" style="display:none">
               <a class="btn" href="/2019/08/24/Spring源码/Spring源码学习【七】Web环境中启动和关闭IOC容器/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
@@ -542,6 +545,8 @@
           <!--/noindex-->
         
       
+      
+
     </div>
 
     
@@ -611,13 +616,13 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h3 class="post-title" itemprop="name headline">
                 
                 
                 <a href="/2019/08/24/Spring源码/Spring源码学习【六】AOP原理解析（二）拦截器链/" class="post-title-link" itemprop="url">Spring源码学习【六】AOP原理解析（二）拦截器链</a>
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -721,15 +726,17 @@
       
 
       
+      
+      
         
           
             <p>
-              前言通过上一篇 Spring源码学习【六】AOP原理解析（一）代理对象的生成 的学习，我们知道了Spring是通过后置处理器来生成代理对象的
+              前言通过上一篇 Spring源码学习【六】AOP原理解析（一）代理对象的生成 的学习，我们知道了Spring是通过后置处理器来生成代理对象的，且获取到代理对象后会阻止原Bean的默认实例化行为，从而将代理对象提供给用户使用，并通过代理对象实现对目标对象的增强，有了这些知识储备，我们继续以JdkDyn
               ...
             </p>
           <!--noindex-->
           
-            <div class="post-button text-center">
+            <div class="post-button text-center" style="display:none">
               <a class="btn" href="/2019/08/24/Spring源码/Spring源码学习【六】AOP原理解析（二）拦截器链/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
@@ -738,6 +745,8 @@
           <!--/noindex-->
         
       
+      
+
     </div>
 
     
@@ -807,13 +816,13 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h3 class="post-title" itemprop="name headline">
                 
                 
                 <a href="/2019/08/24/Spring源码/Spring源码学习【六】AOP原理解析（一）代理对象的生成/" class="post-title-link" itemprop="url">Spring源码学习【六】AOP原理解析（一）代理对象的生成</a>
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -917,15 +926,18 @@
       
 
       
+      
+      
         
           
             <p>
-              前言AOP（Aspect Oriented Programming 面向切面编程）是Spring框架的核心功能之一，关于AOP中一些概念的理
+              前言AOP（Aspect Oriented Programming 面向切面编程）是Spring框架的核心功能之一，关于AOP中一些概念的理解可以参考 SpringAOP概念及其使用 ，下面以一个简单的例子作为Spring AOP源码学习的起点。
+首先，定义一个切面类CustomAspect，如下所
               ...
             </p>
           <!--noindex-->
           
-            <div class="post-button text-center">
+            <div class="post-button text-center" style="display:none">
               <a class="btn" href="/2019/08/24/Spring源码/Spring源码学习【六】AOP原理解析（一）代理对象的生成/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
@@ -934,6 +946,8 @@
           <!--/noindex-->
         
       
+      
+
     </div>
 
     
@@ -1003,13 +1017,13 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h3 class="post-title" itemprop="name headline">
                 
                 
                 <a href="/2019/08/24/Spring源码/Spring源码学习【五】填坑篇之PropertyValue解析/" class="post-title-link" itemprop="url">Spring源码学习【五】填坑篇之PropertyValue解析</a>
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -1113,15 +1127,17 @@
       
 
       
+      
+      
         
           
             <p>
-              经过上一篇文章 Spring源码学习【四】依赖注入过程 对Spring依赖注入过程的分析，我们知道了在注入Property时会创建一个深拷贝
+              经过上一篇文章 Spring源码学习【四】依赖注入过程 对Spring依赖注入过程的分析，我们知道了在注入Property时会创建一个深拷贝副本，将这个副本持有的Property注入到Bean中，在创建的过程中会使用BeanDefinitionValueResolver解析PropertyValue
               ...
             </p>
           <!--noindex-->
           
-            <div class="post-button text-center">
+            <div class="post-button text-center" style="display:none">
               <a class="btn" href="/2019/08/24/Spring源码/Spring源码学习【五】填坑篇之PropertyValue解析/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
@@ -1130,6 +1146,8 @@
           <!--/noindex-->
         
       
+      
+
     </div>
 
     
@@ -1199,13 +1217,13 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h3 class="post-title" itemprop="name headline">
                 
                 
                 <a href="/2019/08/24/Spring源码/Spring源码学习【四】依赖注入过程/" class="post-title-link" itemprop="url">Spring源码学习【四】依赖注入过程</a>
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -1309,15 +1327,19 @@
       
 
       
+      
+      
         
           
             <p>
-              总览通过前面的分析，我们知道了IOC容器在初始化过程中建立了BeanDefinition的数据结构，接下来就需要进行依赖注入，处理Bean之
+              总览通过前面的分析，我们知道了IOC容器在初始化过程中建立了BeanDefinition的数据结构，接下来就需要进行依赖注入，处理Bean之间的依赖关系。
+通常，我们可以通过lazy-init属性控制Bean的实例化（依赖注入）时机。
+当lazy-init=true时，依赖注入会发生在第一次向容器获
               ...
             </p>
           <!--noindex-->
           
-            <div class="post-button text-center">
+            <div class="post-button text-center" style="display:none">
               <a class="btn" href="/2019/08/24/Spring源码/Spring源码学习【四】依赖注入过程/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
@@ -1326,6 +1348,8 @@
           <!--/noindex-->
         
       
+      
+
     </div>
 
     
@@ -1395,13 +1419,13 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h3 class="post-title" itemprop="name headline">
                 
                 
                 <a href="/2019/08/24/Spring源码/Spring源码学习【三】填坑篇之BeanDefinition的解析/" class="post-title-link" itemprop="url">Spring源码学习【三】填坑篇之BeanDefinition的解析</a>
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -1505,15 +1529,18 @@
       
 
       
+      
+      
         
           
             <p>
-              在 Spring源码学习【二】IOC容器的初始化（二）BeanDefinition载入 中，我们分析了BeanDefinition的载入过程
+              在 Spring源码学习【二】IOC容器的初始化（二）BeanDefinition载入 中，我们分析了BeanDefinition的载入过程，同时也留下了这样一句注释：
+// TODO：待深入学习AbstractBeanDefinition beanDefinition = parseBeanDef
               ...
             </p>
           <!--noindex-->
           
-            <div class="post-button text-center">
+            <div class="post-button text-center" style="display:none">
               <a class="btn" href="/2019/08/24/Spring源码/Spring源码学习【三】填坑篇之BeanDefinition的解析/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
@@ -1522,6 +1549,8 @@
           <!--/noindex-->
         
       
+      
+
     </div>
 
     
@@ -1591,13 +1620,13 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h3 class="post-title" itemprop="name headline">
                 
                 
                 <a href="/2019/08/24/Spring源码/Spring源码学习【二】IOC容器的初始化（三）BeanDefinition注册/" class="post-title-link" itemprop="url">Spring源码学习【二】IOC容器的初始化（三）BeanDefinition注册</a>
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -1701,15 +1730,17 @@
       
 
       
+      
+      
         
           
             <p>
-              总览经过以上的分析，我们知道Document中BeanDefinition的解析是在DefaultBeanDefinitionDocumen
+              总览经过以上的分析，我们知道Document中BeanDefinition的解析是在DefaultBeanDefinitionDocumentReader中进行的，让我们回到DefaultBeanDefinitionDocumentReader的processBeanDefinition方法中，继续
               ...
             </p>
           <!--noindex-->
           
-            <div class="post-button text-center">
+            <div class="post-button text-center" style="display:none">
               <a class="btn" href="/2019/08/24/Spring源码/Spring源码学习【二】IOC容器的初始化（三）BeanDefinition注册/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
@@ -1718,6 +1749,8 @@
           <!--/noindex-->
         
       
+      
+
     </div>
 
     
@@ -1787,13 +1820,13 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h3 class="post-title" itemprop="name headline">
                 
                 
                 <a href="/2019/08/24/Spring源码/Spring源码学习【二】IOC容器的初始化（二）BeanDefinition载入/" class="post-title-link" itemprop="url">Spring源码学习【二】IOC容器的初始化（二）BeanDefinition载入</a>
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -1897,15 +1930,17 @@
       
 
       
+      
+      
         
           
             <p>
-              总览经过前一篇（Spring源码学习【二】IOC容器的初始化（一）Resource定位）的分析，我们对IOC容器的初始化过程已经有了一定的了
+              总览经过前一篇（Spring源码学习【二】IOC容器的初始化（一）Resource定位）的分析，我们对IOC容器的初始化过程已经有了一定的了解。IOC的初始化由refresh()方法启动，最终对Resource的载入是由XmlBeanDefinitionReader处理的。参考上一节中6.loadB
               ...
             </p>
           <!--noindex-->
           
-            <div class="post-button text-center">
+            <div class="post-button text-center" style="display:none">
               <a class="btn" href="/2019/08/24/Spring源码/Spring源码学习【二】IOC容器的初始化（二）BeanDefinition载入/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
@@ -1914,6 +1949,8 @@
           <!--/noindex-->
         
       
+      
+
     </div>
 
     
@@ -1983,13 +2020,13 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h3 class="post-title" itemprop="name headline">
                 
                 
                 <a href="/2019/08/24/Spring源码/Spring源码学习【二】IOC容器的初始化（一）Resource定位/" class="post-title-link" itemprop="url">Spring源码学习【二】IOC容器的初始化（一）Resource定位</a>
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -2093,15 +2130,17 @@
       
 
       
+      
+      
         
           
             <p>
-              总览在使用IOC容器之前，需要定义一个Resource来定位容器BeanDefinition的资源文件，Resource类继承关系如下图所示
+              总览在使用IOC容器之前，需要定义一个Resource来定位容器BeanDefinition的资源文件，Resource类继承关系如下图所示，参考使用XmlBeanFactory 和DefaultListableBeanFactory两个IOC容器时，均使用了ClassPathRescource作为
               ...
             </p>
           <!--noindex-->
           
-            <div class="post-button text-center">
+            <div class="post-button text-center" style="display:none">
               <a class="btn" href="/2019/08/24/Spring源码/Spring源码学习【二】IOC容器的初始化（一）Resource定位/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
@@ -2110,6 +2149,8 @@
           <!--/noindex-->
         
       
+      
+
     </div>
 
     
@@ -2179,13 +2220,13 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
+          <h3 class="post-title" itemprop="name headline">
                 
                 
                 <a href="/2019/08/24/Spring源码/Spring源码学习【一】初识IOC容器/" class="post-title-link" itemprop="url">Spring源码学习【一】初识IOC容器</a>
               
             
-          </h1>
+          </h3>
         
 
         <div class="post-meta">
@@ -2289,15 +2330,18 @@
       
 
       
+      
+      
         
           
             <p>
-              IOC和DIIOC（Inversion Of Control）：控制反转，是Spring的核心。所谓控制反转，就是将对象的创建和管理交由Sp
+              IOC和DIIOC（Inversion Of Control）：控制反转，是Spring的核心。所谓控制反转，就是将对象的创建和管理交由Spring容器控制，这是一种重要的面向对象设计思想，能够帮助我们设计出低耦合的程序。
+DI（Dependency Injection）：依赖注入。在运行期间，动态
               ...
             </p>
           <!--noindex-->
           
-            <div class="post-button text-center">
+            <div class="post-button text-center" style="display:none">
               <a class="btn" href="/2019/08/24/Spring源码/Spring源码学习【一】初识IOC容器/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
@@ -2306,6 +2350,8 @@
           <!--/noindex-->
         
       
+      
+
     </div>
 
     
@@ -2549,6 +2595,7 @@
             <div class="links-of-author motion-element">
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -2557,9 +2604,11 @@
                     
                   
                   <a href="https://github.com/GreedyStar" title="GitHub &rarr; https://github.com/GreedyStar" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                </span>
+                  <center>
+                </center></center></span>
               
                 <span class="links-of-author-item">
+                  <center>
                   
                   
                     
@@ -2568,7 +2617,8 @@
                     
                   
                   <a href="https://blog.csdn.net/greedystar" title="CSDN &rarr; https://blog.csdn.net/greedystar" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>CSDN</a>
-                </span>
+                  <center>
+                </center></center></span>
               
             </div>
           
