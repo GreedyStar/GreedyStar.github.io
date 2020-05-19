@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 3px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.jpg?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.jpg?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.jpg?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="上一篇中我们构建了SpringBoot种子项目，整合了Mybatis、Druid、Swagger2，过程中我们发现以下两个问题：  application.yml配置文件中的数据库用户密码是明文的，直接将密码以明文的方式写在配置文件中显然是不合适的  Druid监控平台是基于内存的，重启则会丢失监控数据   关于以上两个问题的配置，Druid的Wiki中已经给出了解决方案，下面我们带着以上两个问题">
+<meta name="keywords" content="SpringBoot,Druid">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringBoot学习笔记【二】Druid 监控记录持久化 + 数据库密码加密">
+<meta property="og:url" content="http://b.greedystar.com/2020/05/09/SpringBoot/SpringBoot学习笔记【二】Druid 监控记录持久化 + 数据库密码加密/index.html">
+<meta property="og:site_name" content="GreedyStar">
+<meta property="og:description" content="上一篇中我们构建了SpringBoot种子项目，整合了Mybatis、Druid、Swagger2，过程中我们发现以下两个问题：  application.yml配置文件中的数据库用户密码是明文的，直接将密码以明文的方式写在配置文件中显然是不合适的  Druid监控平台是基于内存的，重启则会丢失监控数据   关于以上两个问题的配置，Druid的Wiki中已经给出了解决方案，下面我们带着以上两个问题">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://b.greedystar.com/2020/05/09/SpringBoot/SpringBoot学习笔记【二】Druid%20监控记录持久化%20+%20数据库密码加密/20180715194722503.png">
+<meta property="og:image" content="http://b.greedystar.com/2020/05/09/SpringBoot/SpringBoot学习笔记【二】Druid%20监控记录持久化%20+%20数据库密码加密/20180715200944888.png">
+<meta property="og:updated_time" content="2020-05-19T12:59:35.900Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringBoot学习笔记【二】Druid 监控记录持久化 + 数据库密码加密">
+<meta name="twitter:description" content="上一篇中我们构建了SpringBoot种子项目，整合了Mybatis、Druid、Swagger2，过程中我们发现以下两个问题：  application.yml配置文件中的数据库用户密码是明文的，直接将密码以明文的方式写在配置文件中显然是不合适的  Druid监控平台是基于内存的，重启则会丢失监控数据   关于以上两个问题的配置，Druid的Wiki中已经给出了解决方案，下面我们带着以上两个问题">
+<meta name="twitter:image" content="http://b.greedystar.com/2020/05/09/SpringBoot/SpringBoot学习笔记【二】Druid%20监控记录持久化%20+%20数据库密码加密/20180715194722503.png">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://b.greedystar.com/2020/05/09/SpringBoot/SpringBoot学习笔记【二】Druid 监控记录持久化 + 数据库密码加密/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>SpringBoot学习笔记【二】Druid 监控记录持久化 + 数据库密码加密 | GreedyStar</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9886835617b579c8d3f880bfc88bbd0c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">GreedyStar</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">个人博客</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://b.greedystar.com/2020/05/09/SpringBoot/SpringBoot学习笔记【二】Druid 监控记录持久化 + 数据库密码加密/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="一颗贪婪的星">
+      <meta itemprop="description" content="奋飞不辍">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="GreedyStar">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h3 class="post-title" itemprop="name headline">SpringBoot学习笔记【二】Druid 监控记录持久化 + 数据库密码加密
+
+              
+            
+          </h3>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-05-09 10:35:21" itemprop="dateCreated datePublished" datetime="2020-05-09T10:35:21+08:00">2020-05-09</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-05-19 20:59:35" itemprop="dateModified" datetime="2020-05-19T20:59:35+08:00">2020-05-19</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/SpringBoot/" itemprop="url" rel="index"><span itemprop="name">SpringBoot</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/05/09/SpringBoot/SpringBoot学习笔记【二】Druid 监控记录持久化 + 数据库密码加密/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/09/SpringBoot/SpringBoot学习笔记【二】Druid 监控记录持久化 + 数据库密码加密/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+      
+      
+        <p>上一篇中我们构建了SpringBoot种子项目，整合了Mybatis、Druid、Swagger2，过程中我们发现以下两个问题：</p>
+<ol>
+<li><p>application.yml配置文件中的数据库用户密码是明文的，直接将密码以明文的方式写在配置文件中显然是不合适的</p>
+</li>
+<li><p>Druid监控平台是基于内存的，重启则会丢失监控数据</p>
+</li>
+</ol>
+<p>关于以上两个问题的配置，Druid的Wiki中已经给出了解决方案，下面我们带着以上两个问题进行学习。</p>
+<h1 id="监控记录持久化"><a href="#监控记录持久化" class="headerlink" title="监控记录持久化"></a><strong>监控记录持久化</strong></h1><p>Wiki链接：<a href="https://github.com/alibaba/druid/wiki/%E6%80%8E%E4%B9%88%E4%BF%9D%E5%AD%98Druid%E7%9A%84%E7%9B%91%E6%8E%A7%E8%AE%B0%E5%BD%95" target="_blank" rel="noopener">怎么保存Druid的监控记录</a></p>
+<p>Druid监控记录持久需要配置 spring.datasource.druid.timeBetweenLogStatsMillis 属性，这个表示每隔多长时间将监控记录输出到日志文件中，当 timeBetweenLogStatsMillis &gt; 0 时，Druid会自动进行监控记录的日志输出。</p>
+<p>这里的日志输出默认是在com.alibaba.druid.pool.DruidDataSourceStatLoggerImpl中实现的，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DruidDataSourceStatLoggerImpl</span> <span class="keyword">extends</span> <span class="title">DruidDataSourceStatLoggerAdapter</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Log LOG    = LogFactory.getLog(DruidDataSourceStatLoggerImpl.class);</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">private</span> Log        logger = LOG;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DruidDataSourceStatLoggerImpl</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.configFromProperties(System.getProperties());</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@since</span> 0.2.21</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">configFromProperties</span><span class="params">(Properties properties)</span> </span>&#123;</span><br><span class="line">        String property = properties.getProperty(<span class="string">"druid.stat.loggerName"</span>);</span><br><span class="line">        <span class="keyword">if</span> (property != <span class="keyword">null</span> &amp;&amp; property.length() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            setLoggerName(property);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> Log <span class="title">getLogger</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> logger;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setLoggerName</span><span class="params">(String loggerName)</span> </span>&#123;</span><br><span class="line">        logger = LogFactory.getLog(loggerName);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setLogger</span><span class="params">(Log logger)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (logger == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"logger can not be null"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.logger = logger;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isLogEnable</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> logger.isInfoEnabled();</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">log</span><span class="params">(String value)</span> </span>&#123;</span><br><span class="line">        logger.info(value);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">log</span><span class="params">(DruidDataSourceStatValue statValue)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!isLogEnable()) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        Map&lt;String, Object&gt; map = <span class="keyword">new</span> LinkedHashMap&lt;String, Object&gt;();</span><br><span class="line"> </span><br><span class="line">        map.put(<span class="string">"url"</span>, statValue.url);</span><br><span class="line">        map.put(<span class="string">"dbType"</span>, statValue.getDbType());</span><br><span class="line">        map.put(<span class="string">"name"</span>, statValue.getName());</span><br><span class="line">        map.put(<span class="string">"activeCount"</span>, statValue.getActiveCount());</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span> (statValue.getActivePeak() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            map.put(<span class="string">"activePeak"</span>, statValue.getActivePeak());</span><br><span class="line">            map.put(<span class="string">"activePeakTime"</span>, statValue.getActivePeakTime());</span><br><span class="line">        &#125;</span><br><span class="line">        map.put(<span class="string">"poolingCount"</span>, statValue.getPoolingCount());</span><br><span class="line">        <span class="keyword">if</span> (statValue.getPoolingPeak() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            map.put(<span class="string">"poolingPeak"</span>, statValue.getPoolingPeak());</span><br><span class="line">            map.put(<span class="string">"poolingPeakTime"</span>, statValue.getPoolingPeakTime());</span><br><span class="line">        &#125;</span><br><span class="line">        map.put(<span class="string">"connectCount"</span>, statValue.getConnectCount());</span><br><span class="line">        map.put(<span class="string">"closeCount"</span>, statValue.getCloseCount());</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span> (statValue.getWaitThreadCount() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            map.put(<span class="string">"waitThreadCount"</span>, statValue.getWaitThreadCount());</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span> (statValue.getNotEmptyWaitCount() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            map.put(<span class="string">"notEmptyWaitCount"</span>, statValue.getNotEmptyWaitCount());</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span> (statValue.getNotEmptyWaitMillis() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            map.put(<span class="string">"notEmptyWaitMillis"</span>, statValue.getNotEmptyWaitMillis());</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span> (statValue.getLogicConnectErrorCount() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            map.put(<span class="string">"logicConnectErrorCount"</span>, statValue.getLogicConnectErrorCount());</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span> (statValue.getPhysicalConnectCount() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            map.put(<span class="string">"physicalConnectCount"</span>, statValue.getPhysicalConnectCount());</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span> (statValue.getPhysicalCloseCount() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            map.put(<span class="string">"physicalCloseCount"</span>, statValue.getPhysicalCloseCount());</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span> (statValue.getPhysicalConnectErrorCount() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            map.put(<span class="string">"physicalConnectErrorCount"</span>, statValue.getPhysicalConnectErrorCount());</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span> (statValue.getExecuteCount() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            map.put(<span class="string">"executeCount"</span>, statValue.getExecuteCount());</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span> (statValue.getErrorCount() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            map.put(<span class="string">"errorCount"</span>, statValue.getErrorCount());</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span> (statValue.getCommitCount() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            map.put(<span class="string">"commitCount"</span>, statValue.getCommitCount());</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span> (statValue.getRollbackCount() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            map.put(<span class="string">"rollbackCount"</span>, statValue.getRollbackCount());</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span> (statValue.getPstmtCacheHitCount() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            map.put(<span class="string">"pstmtCacheHitCount"</span>, statValue.getPstmtCacheHitCount());</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span> (statValue.getPstmtCacheMissCount() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            map.put(<span class="string">"pstmtCacheMissCount"</span>, statValue.getPstmtCacheMissCount());</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span> (statValue.getStartTransactionCount() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            map.put(<span class="string">"startTransactionCount"</span>, statValue.getStartTransactionCount());</span><br><span class="line">            map.put(<span class="string">"transactionHistogram"</span>, rtrim(statValue.getTransactionHistogram()));</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span> (statValue.getConnectCount() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            map.put(<span class="string">"connectionHoldTimeHistogram"</span>, rtrim(statValue.getConnectionHoldTimeHistogram()));</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span> (statValue.getClobOpenCount() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            map.put(<span class="string">"clobOpenCount"</span>, statValue.getClobOpenCount());</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span> (statValue.getBlobOpenCount() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            map.put(<span class="string">"blobOpenCount"</span>, statValue.getBlobOpenCount());</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">if</span> (statValue.getSqlSkipCount() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            map.put(<span class="string">"sqlSkipCount"</span>, statValue.getSqlSkipCount());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 省略部分代码</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (statValue.getKeepAliveCheckCount() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            map.put(<span class="string">"keepAliveCheckCount"</span>, statValue.getKeepAliveCheckCount());</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        String text = JSONUtils.toJSONString(map);</span><br><span class="line"> </span><br><span class="line">        log(text);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到Druid是以Json形式进行日志输出的，具体的数据处理在log(DruidDataSourceStatValue)方法中进行，这个方法也是后续我们需要用到的。</p>
+<p>Druid默认的持久化方式是进行文件记录，如果我们想要自定义监控记录的持久化方式则需要自定义StatLogger，参考以上StatLogger的默认实现，我们可以定义一个简单的StatLogger，如下所示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StatLogger</span> <span class="keyword">extends</span> <span class="title">DruidDataSourceStatLoggerAdapter</span> <span class="keyword">implements</span> <span class="title">DruidDataSourceStatLogger</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Logger logger = LoggerFactory.getLogger(StatLogger.class);</span><br><span class="line"> </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">log</span><span class="params">(DruidDataSourceStatValue statValue)</span> </span>&#123;</span><br><span class="line">        logger.info(<span class="string">"***************************************************"</span>);</span><br><span class="line">        logger.info(<span class="string">"                  监控数据持久化                    "</span>);</span><br><span class="line">        logger.info(<span class="string">"***************************************************"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这里，我们重写了log(DruidDataSourceStatValue)方法，一个简单的StatLogger就定制完成了，下面我需要在dataSource中配置这个statLogger，我们在配置文件中druid节点下加上如下配置：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">time</span>-<span class="keyword">between</span>-<span class="built_in">log</span>-stats-millis: <span class="number">60000</span></span><br><span class="line">stat-logger:</span><br></pre></td></tr></table></figure>
+<p>配置过程中发现 stat-logger 对应的是一个DruidDataSourceStatLoggerAdapter对象，而yml配置文件中仅支持基本数据类型和Map、List等类型，查看源码可以发现，在DruidAbstractDataSource类中有如下定义：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="keyword">long</span> timeBetweenLogStatsMillis;</span><br><span class="line"><span class="keyword">protected</span> DruidDataSourceStatLogger statLogger  = <span class="keyword">new</span> DruidDataSourceStatLoggerImpl();</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setStatLoggerClassName</span><span class="params">(String className)</span> </span>&#123;</span><br><span class="line">    Class&lt;?&gt; clazz;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        clazz = Class.forName(className);</span><br><span class="line">        DruidDataSourceStatLogger statLogger = (DruidDataSourceStatLogger) clazz.newInstance();</span><br><span class="line">        <span class="keyword">this</span>.setStatLogger(statLogger);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(className, e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setStatLogger</span><span class="params">(DruidDataSourceStatLogger statLogger)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.statLogger = statLogger;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>支持直接设置statLogger对象和通过类名设置两种方式，回到配置文件中发现没有类名的这个配置项，这就比较尴尬了，如下：</p>
+<p><img src="/2020/05/09/SpringBoot/SpringBoot学习笔记【二】Druid 监控记录持久化 + 数据库密码加密/20180715194722503.png" alt></p>
+<p>既然通过配置文件不能够直接配置，那么我们就以配置类的方式来配置Druid数据源，新建一个Druid的配置类，如下所示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DruidConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="meta">@ConfigurationProperties</span>(prefix = <span class="string">"spring.datasource.druid"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> DataSource <span class="title">druidDataSource</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        DruidDataSource dataSource = <span class="keyword">new</span> DruidDataSource();</span><br><span class="line">        dataSource.setStatLogger(<span class="keyword">new</span> StatLogger());</span><br><span class="line">        <span class="keyword">return</span> dataSource;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里用到了@Configuration和@Bean注解，@Configuration就相当于我们写在xml文件中的<beans></beans>，@Bean则是<bean></bean>，xml是Spring早期的配置形式，从Spring 3.0开始提出了通过Java类进行配置的形式。</p>
+<p>其中@ConfigurationProperties表示配置的属性，这里会将配置文件中以spring.datasource.druid为前缀的值映射到DataSource对象的同名属性上，在这个方法中，我们将DatSource的statLogger设置为我们自定义的StatLogger，下面让我们来看一看效果（将时间间隔设置为了10秒）：</p>
+<p><img src="/2020/05/09/SpringBoot/SpringBoot学习笔记【二】Druid 监控记录持久化 + 数据库密码加密/20180715200944888.png" alt></p>
+<p>从图中可以看到，每隔10秒会执行一次StatLogger中的log方法。</p>
+<p>这样，我们就可以参照Druid的默认实现来进行一系列的数据持久化操作了。</p>
+<h1 id="数据库密码加密"><a href="#数据库密码加密" class="headerlink" title="数据库密码加密"></a><strong>数据库密码加密</strong></h1><p>参考<a href="https://github.com/alibaba/druid/wiki/%E4%BD%BF%E7%94%A8ConfigFilter" target="_blank" rel="noopener">使用ConfigFilter 2.数据库密码加密</a>，首先对数据库密码进行加密，得到私钥、公钥和加密后的密码，如下：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">privateKey:</span>MIIBVQIBADANBgkqhkiG9w0BAQEFAASCAT8wggE7AgEAAkEAjRDnoc5cjZnfeQ2mA7G8xtoTsFFTDSlkws9kDQ974n<span class="regexp">/pHsKr3sFQIPKCTMvt69R9CY+ms2HooppIpdXR0FWCFwIDAQABAkA0la6i5Hgf2NIzH+FY0zKZtcVNHqOk7l8/</span>N2wGalU18wa1AGwJnPYnsHeTqqxv5AwA9ifqr<span class="regexp">/72xjmZjQXE9tRRAiEAxorHSILMWJzMwIEjOPA4RE+LfbPYotsfVAszPNR+3K0CIQC14/</span>H89XZtBR2R9+X8kaRwK6Xh8TkSEXLyF2labXyOUwIgB+<span class="number">2</span>YwZt<span class="regexp">/f3ZbcsB1YJuvE4M9pbpdxzsKyDdeR2qQ2k0CIQCuSePA7jwyLuqsygvYvn4A9fIX1JtJEus/</span>yusquSrW<span class="regexp">/QIhAID7hqZmohMq/</span>W75Ujkrf/YcQnGDq8e9iVpVFhiinll+</span><br><span class="line"><span class="string">publicKey:</span>MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAI0Q56HOXI2Z33kNpgOxvMbaE7BRUw0pZMLPZA0Pe+J/<span class="number">6</span>R7Cq97BUCDygkzL7evUfQmPprNh6KKaSKXV0dBVghcCAwEAAQ==</span><br><span class="line"><span class="string">password:</span>CaYks2C7nfXL0rYtFag29XiCaG<span class="comment">//f4A/wPjoMvYQDEeZJo/Vr3ZpFHMdeg75CeFQ5dvplmbSU0rGNn4wNGhJtw==</span></span><br></pre></td></tr></table></figure>
+<p>然后修改application.yml配置文件，来支持数据库密码的加密，如下所示：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">password:</span> CaYks2C7nfXL0rYtFag29XiCaG<span class="comment">//f4A/wPjoMvYQDEeZJo/Vr3ZpFHMdeg75CeFQ5dvplmbSU0rGNn4wNGhJtw==</span></span><br><span class="line"><span class="string">filters:</span> stat,wall,log4j2,config</span><br><span class="line">connection-<span class="string">properties:</span> config.decrypt=<span class="literal">true</span>;config.decrypt.key=MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAI0Q56HOXI2Z33kNpgOxvMbaE7BRUw0pZMLPZA0Pe+J/<span class="number">6</span>R7Cq97BUCDygkzL7evUfQmPprNh6KKaSKXV0dBVghcCAwEAAQ==</span><br></pre></td></tr></table></figure>
+<p>其中password为加密后的数据库密码，config.decrypt.key为公钥。</p>
+<p>这里需要注意，一定要在filters中加上config的配置，用于通过别名启动插件，如下：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">filter</span><span class="variable">s:</span> stat,<span class="keyword">wall</span>,log4j2,config</span><br></pre></td></tr></table></figure>
+<p>这里表示启动了监控统计、SQL防火墙、日志记录和Config。</p>
+<p>Druid的Wiki中指出：有两种配置Filter的方式，一种是配置filters属性，一种是配置proxyFilters属性，这两种配置是组合关系，不是替代关系。</p>
+<p>但实际配置过程中发现，如果只配置proxyFilters，如下启动configFilter：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spring<span class="selector-class">.datasource</span><span class="selector-class">.druid</span><span class="selector-class">.filter</span><span class="selector-class">.config</span><span class="selector-class">.enabled</span>=true</span><br></pre></td></tr></table></figure>
+<p>实际是无法启动configFilter的，需要在filters中通过Filter别名指定使用的插件。</p>
+<p>经过以上配置，我们就已经完成了数据库密码加密的配置了，但我们发现，这样实际上是将密文和公钥都写在了配置文件中，这样的配置是否可用呢？</p>
+<p>带着问题回到获得密文这一步，我们使用了druid-x.x.x.jar中的ConfigTools工具进行加密，同样的，我们也可以使用这个工具进行解密，如下所示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String password = ConfigTools.decrypt(<span class="string">"public key"</span>,<span class="string">"cipher"</span>);</span><br></pre></td></tr></table></figure>
+<p>这样一来，直接将公钥和密文写在配置文件中与明文就没有什么区别了，所以我们可以将公钥放在配置类中，当然也可以通过其他的方式来获取公钥和密文，如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DruidConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="meta">@ConfigurationProperties</span>(prefix = <span class="string">"spring.datasource.druid"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> DataSource <span class="title">druidDataSource</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        DruidDataSource dataSource = <span class="keyword">new</span> DruidDataSource();</span><br><span class="line">        dataSource.setStatLogger(<span class="keyword">new</span> StatLogger());</span><br><span class="line">        Properties properties = <span class="keyword">new</span> Properties();</span><br><span class="line">        properties.setProperty(<span class="string">"config.decrypt"</span>, <span class="string">"true"</span>);</span><br><span class="line">        properties.setProperty(<span class="string">"config.decrypt.key"</span>, <span class="string">"MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAI0Q56HOXI2Z33kNpgOxvMbaE7BRUw0pZMLPZA0Pe+J/6R7Cq97BUCDygkzL7evUfQmPprNh6KKaSKXV0dBVghcCAwEAAQ=="</span>);</span><br><span class="line">        dataSource.setConnectProperties(properties);</span><br><span class="line">        <span class="keyword">return</span> dataSource;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>经过以上的配置，我们就完成了数据库密码加密的配置，更具体的配置可以参照Druid的Wiki进行学习。</p>
+<p>源码地址：<a href="https://github.com/GreedyStar/SpringBootDemo/tree/sample-2" target="_blank" rel="noopener">https://github.com/GreedyStar/SpringBootDemo/tree/sample-2</a></p>
+<p><strong>最后的最后，安利一下自己写的一个Java代码生成工具，能够方便的生成Spring、SpringMVC、Mybatis架构下的Java代码，希望能对大家有所帮助，地址：<a href="https://github.com/GreedyStar/generator" target="_blank" rel="noopener">Java代码生成器：Generator</a></strong></p>
+
+      
+      
+
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SpringBoot/" rel="tag"><i class="fa fa-tag"></i> SpringBoot</a>
+          
+            <a href="/tags/Druid/" rel="tag"><i class="fa fa-tag"></i> Druid</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/09/SpringBoot/SpringBoot学习笔记【一】整合 Mybatis + Druid + Swagger2/" rel="next" title="SpringBoot学习笔记【一】整合 Mybatis + Druid + Swagger2">
+                <i class="fa fa-chevron-left"></i> SpringBoot学习笔记【一】整合 Mybatis + Druid + Swagger2
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/09/SpringBoot/SpringBoot学习笔记【三】整合 Security + JWT + 异常处理/" rel="prev" title="SpringBoot学习笔记【三】整合 Security + JWT + 异常处理">
+                SpringBoot学习笔记【三】整合 Security + JWT + 异常处理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="一颗贪婪的星">
+            
+              <p class="site-author-name" itemprop="name">一颗贪婪的星</p>
+              <div class="site-description motion-element" itemprop="description">奋飞不辍</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">40</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <center>
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="http://www.greedystar.com" title="WebSite &rarr; http://www.greedystar.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>WebSite</a>
+                  <center>
+                </center></center></span>
+              
+                <span class="links-of-author-item">
+                  <center>
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/GreedyStar" title="GitHub &rarr; https://github.com/GreedyStar" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  <center>
+                </center></center></span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#监控记录持久化"><span class="nav-number">1.</span> <span class="nav-text">监控记录持久化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据库密码加密"><span class="nav-number">2.</span> <span class="nav-text">数据库密码加密</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">一颗贪婪的星</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'ekKjjiKBuBmHywaHTvrjaaOa-gzGzoHsz',
+    appKey: 'enW5GXtdR68oQVtLhAb65RbB',
+    placeholder: '请务必在上方输入您的邮箱哦，否则您将可能错过作者的回复.',
+    avatar: 'mp',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

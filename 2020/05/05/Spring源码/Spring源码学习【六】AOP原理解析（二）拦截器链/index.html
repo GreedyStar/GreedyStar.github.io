@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 3px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.jpg?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.jpg?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.jpg?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="前言通过上一篇 Spring源码学习【六】AOP原理解析（一）代理对象的生成 的学习，我们知道了Spring是通过后置处理器来生成代理对象的，且获取到代理对象后会阻止原Bean的默认实例化行为，从而将代理对象提供给用户使用，并通过代理对象实现对目标对象的增强，有了这些知识储备，我们继续以JdkDynamicAopProxy为例，学习一下代理对象是如何对目标对象进行增强的。 源码学习回到上一篇Jdk">
+<meta name="keywords" content="Spring源码,AOP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring源码学习【六】AOP原理解析（二）拦截器链">
+<meta property="og:url" content="http://b.greedystar.com/2020/05/05/Spring源码/Spring源码学习【六】AOP原理解析（二）拦截器链/index.html">
+<meta property="og:site_name" content="GreedyStar">
+<meta property="og:description" content="前言通过上一篇 Spring源码学习【六】AOP原理解析（一）代理对象的生成 的学习，我们知道了Spring是通过后置处理器来生成代理对象的，且获取到代理对象后会阻止原Bean的默认实例化行为，从而将代理对象提供给用户使用，并通过代理对象实现对目标对象的增强，有了这些知识储备，我们继续以JdkDynamicAopProxy为例，学习一下代理对象是如何对目标对象进行增强的。 源码学习回到上一篇Jdk">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-05-19T12:53:43.725Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring源码学习【六】AOP原理解析（二）拦截器链">
+<meta name="twitter:description" content="前言通过上一篇 Spring源码学习【六】AOP原理解析（一）代理对象的生成 的学习，我们知道了Spring是通过后置处理器来生成代理对象的，且获取到代理对象后会阻止原Bean的默认实例化行为，从而将代理对象提供给用户使用，并通过代理对象实现对目标对象的增强，有了这些知识储备，我们继续以JdkDynamicAopProxy为例，学习一下代理对象是如何对目标对象进行增强的。 源码学习回到上一篇Jdk">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://b.greedystar.com/2020/05/05/Spring源码/Spring源码学习【六】AOP原理解析（二）拦截器链/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Spring源码学习【六】AOP原理解析（二）拦截器链 | GreedyStar</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9886835617b579c8d3f880bfc88bbd0c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">GreedyStar</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">个人博客</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://b.greedystar.com/2020/05/05/Spring源码/Spring源码学习【六】AOP原理解析（二）拦截器链/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="一颗贪婪的星">
+      <meta itemprop="description" content="奋飞不辍">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="GreedyStar">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h3 class="post-title" itemprop="name headline">Spring源码学习【六】AOP原理解析（二）拦截器链
+
+              
+            
+          </h3>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-05-05 20:35:21" itemprop="dateCreated datePublished" datetime="2020-05-05T20:35:21+08:00">2020-05-05</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-05-19 20:53:43" itemprop="dateModified" datetime="2020-05-19T20:53:43+08:00">2020-05-19</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Spring源码/" itemprop="url" rel="index"><span itemprop="name">Spring源码</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/05/05/Spring源码/Spring源码学习【六】AOP原理解析（二）拦截器链/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/05/05/Spring源码/Spring源码学习【六】AOP原理解析（二）拦截器链/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+      
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h1><p>通过上一篇 Spring源码学习【六】AOP原理解析（一）代理对象的生成 的学习，我们知道了Spring是通过后置处理器来生成代理对象的，且获取到代理对象后会阻止原Bean的默认实例化行为，从而将代理对象提供给用户使用，并通过代理对象实现对目标对象的增强，有了这些知识储备，我们继续以JdkDynamicAopProxy为例，学习一下代理对象是如何对目标对象进行增强的。</p>
+<h1 id="源码学习"><a href="#源码学习" class="headerlink" title="源码学习"></a><strong>源码学习</strong></h1><p>回到上一篇JdkDynamicAopProxy类中，我们可以发现JdkDynamicAopProxy类实现了InvocationHandler接口，在利用Java反射机制创建代理对象的同时将传入了this对象引用，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">JdkDynamicAopProxy</span> <span class="keyword">implements</span> <span class="title">AopProxy</span>, <span class="title">InvocationHandler</span>, <span class="title">Serializable</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">getProxy</span><span class="params">(@Nullable ClassLoader classLoader)</span> </span>&#123;</span><br><span class="line">        ...</span><br><span class="line">        <span class="keyword">return</span> Proxy.newProxyInstance(classLoader, proxiedInterfaces, <span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里的InvocationHandler接口是代理对象需要实现的接口，其中定义了Invoke方法，用于以回调的方式拦截目标对象方法的调用，我们可以以JdkDynamicAopProxy为例学习invoke的实现，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">JdkDynamicAopProxy</span> <span class="keyword">implements</span> <span class="title">AopProxy</span>, <span class="title">InvocationHandler</span>, <span class="title">Serializable</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="meta">@Nullable</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        MethodInvocation invocation;</span><br><span class="line">        Object oldProxy = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">boolean</span> setProxyContext = <span class="keyword">false</span>;</span><br><span class="line"> </span><br><span class="line">        TargetSource targetSource = <span class="keyword">this</span>.advised.targetSource;</span><br><span class="line">        Object target = <span class="keyword">null</span>;</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (!<span class="keyword">this</span>.equalsDefined &amp;&amp; AopUtils.isEqualsMethod(method)) &#123;</span><br><span class="line">                <span class="comment">// 目标对象未实现equals方法</span></span><br><span class="line">                <span class="keyword">return</span> equals(args[<span class="number">0</span>]);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (!<span class="keyword">this</span>.hashCodeDefined &amp;&amp; AopUtils.isHashCodeMethod(method)) &#123;</span><br><span class="line">                <span class="comment">// 目标对象未实现hashCode方法</span></span><br><span class="line">                <span class="keyword">return</span> hashCode();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (method.getDeclaringClass() == DecoratingProxy.class) &#123;</span><br><span class="line">                <span class="comment">// 装饰模式代理</span></span><br><span class="line">                <span class="keyword">return</span> AopProxyUtils.ultimateTargetClass(<span class="keyword">this</span>.advised);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (!<span class="keyword">this</span>.advised.opaque &amp;&amp; method.getDeclaringClass().isInterface() &amp;&amp; method.getDeclaringClass().isAssignableFrom(Advised.class)) &#123;</span><br><span class="line">                <span class="keyword">return</span> AopUtils.invokeJoinpointUsingReflection(<span class="keyword">this</span>.advised, method, args);</span><br><span class="line">            &#125;</span><br><span class="line">            Object retVal;</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.advised.exposeProxy) &#123;</span><br><span class="line">                oldProxy = AopContext.setCurrentProxy(proxy);</span><br><span class="line">                setProxyContext = <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 获取目标对象</span></span><br><span class="line">            target = targetSource.getTarget();</span><br><span class="line">            Class&lt;?&gt; targetClass = (target != <span class="keyword">null</span> ? target.getClass() : <span class="keyword">null</span>);</span><br><span class="line">            <span class="comment">// 获取要执行的方法的拦截器链</span></span><br><span class="line">            List&lt;Object&gt; chain = <span class="keyword">this</span>.advised.getInterceptorsAndDynamicInterceptionAdvice(method, targetClass);</span><br><span class="line">            <span class="keyword">if</span> (chain.isEmpty()) &#123;</span><br><span class="line">                Object[] argsToUse = AopProxyUtils.adaptArgumentsIfNecessary(method, args);</span><br><span class="line">                <span class="comment">// 拦截器链空，则直接执行目标对象方法</span></span><br><span class="line">                retVal = AopUtils.invokeJoinpointUsingReflection(target, method, argsToUse);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">// 调用拦截器</span></span><br><span class="line">                invocation = <span class="keyword">new</span> ReflectiveMethodInvocation(proxy, target, method, args, targetClass, chain);</span><br><span class="line">                retVal = invocation.proceed();</span><br><span class="line">            &#125;</span><br><span class="line">            Class&lt;?&gt; returnType = method.getReturnType();</span><br><span class="line">            <span class="keyword">if</span> (retVal != <span class="keyword">null</span> &amp;&amp; retVal == target &amp;&amp; returnType != Object.class &amp;&amp; returnType.isInstance(proxy) &amp;&amp; !RawTargetAccess.class.isAssignableFrom(method.getDeclaringClass())) &#123;</span><br><span class="line">                retVal = proxy;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (retVal == <span class="keyword">null</span> &amp;&amp; returnType != Void.TYPE &amp;&amp; returnType.isPrimitive()) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> AopInvocationException(<span class="string">"Null return value from advice does not match primitive return type for: "</span> + method);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> retVal;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (target != <span class="keyword">null</span> &amp;&amp; !targetSource.isStatic()) &#123;</span><br><span class="line">                targetSource.releaseTarget(target);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (setProxyContext) &#123;</span><br><span class="line">                AopContext.setCurrentProxy(oldProxy);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码中我们需要关注两个方面：其一，目标对象targer的方法调用；其二，拦截器的调用。</p>
+<p>首先，看一看目标对象方法的调用，使用了Java的反射机制，具体实现在AopUtils类中，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AopUtils</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="meta">@Nullable</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title">invokeJoinpointUsingReflection</span><span class="params">(@Nullable Object target, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        <span class="comment">// 通过反射调用方法</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            ReflectionUtils.makeAccessible(method);</span><br><span class="line">            <span class="keyword">return</span> method.invoke(target, args);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (InvocationTargetException ex) &#123;</span><br><span class="line">            <span class="keyword">throw</span> ex.getTargetException();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (IllegalArgumentException ex) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> AopInvocationException(<span class="string">"AOP configuration seems to be invalid: tried calling method ["</span> + method + <span class="string">"] on target ["</span> + target + <span class="string">"]"</span>, ex);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">catch</span> (IllegalAccessException ex) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> AopInvocationException(<span class="string">"Could not access method ["</span> + method + <span class="string">"]"</span>, ex);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后，看一看拦截器的调用，具体实现在ReflectiveMethodInvocation类中，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReflectiveMethodInvocation</span> <span class="keyword">implements</span> <span class="title">ProxyMethodInvocation</span>, <span class="title">Cloneable</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="meta">@Nullable</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">proceed</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        <span class="comment">// index由-1开始调用拦截器，当所有拦截器调用完毕后再调用目标对象的方法</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.currentInterceptorIndex == <span class="keyword">this</span>.interceptorsAndDynamicMethodMatchers.size() - <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> invokeJoinpoint();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 从interceptorsAndDynamicMethodMatchers中获取一个对象</span></span><br><span class="line">        <span class="comment">// 这个对象可能是一个匹配器或是一个拦截器</span></span><br><span class="line">        Object interceptorOrInterceptionAdvice = <span class="keyword">this</span>.interceptorsAndDynamicMethodMatchers.get(++<span class="keyword">this</span>.currentInterceptorIndex);</span><br><span class="line">        <span class="keyword">if</span> (interceptorOrInterceptionAdvice <span class="keyword">instanceof</span> InterceptorAndDynamicMethodMatcher) &#123;</span><br><span class="line">            <span class="comment">// 取得匹配器则需要对目标方法进行匹配</span></span><br><span class="line">            InterceptorAndDynamicMethodMatcher dm = (InterceptorAndDynamicMethodMatcher) interceptorOrInterceptionAdvice;</span><br><span class="line">            <span class="keyword">if</span> (dm.methodMatcher.matches(<span class="keyword">this</span>.method, <span class="keyword">this</span>.targetClass, <span class="keyword">this</span>.arguments)) &#123;</span><br><span class="line">                <span class="comment">// 匹配成功，调用拦截器</span></span><br><span class="line">                <span class="keyword">return</span> dm.interceptor.invoke(<span class="keyword">this</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">// 匹配失败，跳过该拦截器，进行递归</span></span><br><span class="line">                <span class="keyword">return</span> proceed();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 直接取得了一个拦截器，那么无需匹配直接调用</span></span><br><span class="line">            <span class="keyword">return</span> ((MethodInterceptor) interceptorOrInterceptionAdvice).invoke(<span class="keyword">this</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="meta">@Nullable</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> Object <span class="title">invokeJoinpoint</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        <span class="comment">// 调用目标对象的方法</span></span><br><span class="line">        <span class="keyword">return</span> AopUtils.invokeJoinpointUsingReflection(<span class="keyword">this</span>.target, <span class="keyword">this</span>.method, <span class="keyword">this</span>.arguments);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>到这里，我们就大体了解了拦截器链和目标方法的调用过程，在我们调用代理对象的目标方法时，会回调到代理对象的invode方法中，在这个方法中调用拦截器链，最终调用目标方法。在这个过程中，我们发现最终调用的拦截器链是由ReflectiveMethodInvocation持有的，拦截器链在构造方法中进行了初始化，如下所示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="keyword">final</span> List&lt;?&gt; interceptorsAndDynamicMethodMatchers;</span><br><span class="line"> </span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> proxy 代理对象</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> target 目标对象</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> method 目标方法</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> arguments 目标方法参数</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> targetClass 目标类</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> interceptorsAndDynamicMethodMatchers 拦截器链</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="title">ReflectiveMethodInvocation</span><span class="params">(Object proxy, @Nullable Object target, </span></span></span><br><span class="line"><span class="function"><span class="params">        Method method, @Nullable Object[] arguments, @Nullable Class&lt;?&gt; targetClass, </span></span></span><br><span class="line"><span class="function"><span class="params">        List&lt;Object&gt; interceptorsAndDynamicMethodMatchers)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.proxy = proxy;</span><br><span class="line">    <span class="keyword">this</span>.target = target;</span><br><span class="line">    <span class="keyword">this</span>.targetClass = targetClass;</span><br><span class="line">    <span class="keyword">this</span>.method = BridgeMethodResolver.findBridgedMethod(method);</span><br><span class="line">    <span class="keyword">this</span>.arguments = AopProxyUtils.adaptArgumentsIfNecessary(method, arguments);</span><br><span class="line">    <span class="keyword">this</span>.interceptorsAndDynamicMethodMatchers = interceptorsAndDynamicMethodMatchers;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>经过上一篇的分析，我们知道ReflectiveMethodInvocation是在JdkDynamicAopProxy的invoke方法中构造的，在构造ReflectiveMethodInvocation对象前，先获取了目标方法的拦截器链，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Object&gt; chain = <span class="keyword">this</span>.advised.getInterceptorsAndDynamicInterceptionAdvice(method, targetClass);</span><br><span class="line">invocation = <span class="keyword">new</span> ReflectiveMethodInvocation(proxy, target, method, args, targetClass, chain);</span><br></pre></td></tr></table></figure>
+<p>上面的这句代码十分重要，现在我们知道Spring是通过生成代理类来实现对目标对象的增强的，在执行目标对象的目标方法前，会首先执行代理对象中配置的一系列拦截器，这里便是获取了所有拦截器，接下来看一看具体的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AdvisedSupport</span> <span class="keyword">extends</span> <span class="title">ProxyConfig</span> <span class="keyword">implements</span> <span class="title">Advised</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取拦截器链，可以看到这里使用了缓存，最终拦截器链的获取由AdvisorChainFactory接口的实现类</span></span><br><span class="line"><span class="comment">     * DefaultAdvisorChainFactory实现</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Object&gt; <span class="title">getInterceptorsAndDynamicInterceptionAdvice</span><span class="params">(Method method, @Nullable Class&lt;?&gt; targetClass)</span> </span>&#123;</span><br><span class="line">        MethodCacheKey cacheKey = <span class="keyword">new</span> MethodCacheKey(method);</span><br><span class="line">        List&lt;Object&gt; cached = <span class="keyword">this</span>.methodCache.get(cacheKey);</span><br><span class="line">        <span class="keyword">if</span> (cached == <span class="keyword">null</span>) &#123;</span><br><span class="line">            cached = <span class="keyword">this</span>.advisorChainFactory.getInterceptorsAndDynamicInterceptionAdvice(<span class="keyword">this</span>, method, targetClass);</span><br><span class="line">            <span class="keyword">this</span>.methodCache.put(cacheKey, cached);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> cached;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>DefaultAdvisorChainFactory用于为目标方法创建拦截器链，代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultAdvisorChainFactory</span> <span class="keyword">implements</span> <span class="title">AdvisorChainFactory</span>, <span class="title">Serializable</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 创建拦截器链</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Object&gt; <span class="title">getInterceptorsAndDynamicInterceptionAdvice</span><span class="params">(Advised config, Method method, @Nullable Class&lt;?&gt; targetClass)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 这里的config实际上之前创建的ProxyFactory，ProxyFactory间接实现了Advised接口</span></span><br><span class="line">        List&lt;Object&gt; interceptorList = <span class="keyword">new</span> ArrayList&lt;&gt;(config.getAdvisors().length);</span><br><span class="line">        Class&lt;?&gt; actualClass = (targetClass != <span class="keyword">null</span> ? targetClass : method.getDeclaringClass());</span><br><span class="line">        <span class="keyword">boolean</span> hasIntroductions = hasMatchingIntroductions(config, actualClass);</span><br><span class="line">        <span class="comment">// 取得一个registry，这里使用了单例模式，用于注册通知适配器</span></span><br><span class="line">        AdvisorAdapterRegistry registry = GlobalAdvisorAdapterRegistry.getInstance();</span><br><span class="line">        <span class="keyword">for</span> (Advisor advisor : config.getAdvisors()) &#123;</span><br><span class="line">            <span class="comment">// 处理切入点通知，方法级别增强</span></span><br><span class="line">            <span class="keyword">if</span> (advisor <span class="keyword">instanceof</span> PointcutAdvisor) &#123;</span><br><span class="line">                PointcutAdvisor pointcutAdvisor = (PointcutAdvisor) advisor;</span><br><span class="line">                <span class="keyword">if</span> (config.isPreFiltered() || pointcutAdvisor.getPointcut().getClassFilter().matches(actualClass)) &#123;</span><br><span class="line">                    <span class="comment">// 通过registry取得拦截器</span></span><br><span class="line">                    MethodInterceptor[] interceptors = registry.getInterceptors(advisor);</span><br><span class="line">                    MethodMatcher mm = pointcutAdvisor.getPointcut().getMethodMatcher();</span><br><span class="line">                    <span class="keyword">if</span> (MethodMatchers.matches(mm, method, actualClass, hasIntroductions)) &#123;</span><br><span class="line">                        <span class="keyword">if</span> (mm.isRuntime()) &#123;</span><br><span class="line">                            <span class="keyword">for</span> (MethodInterceptor interceptor : interceptors) &#123;</span><br><span class="line">                                interceptorList.add(<span class="keyword">new</span> InterceptorAndDynamicMethodMatcher(interceptor, mm));</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">else</span> &#123;</span><br><span class="line">                            interceptorList.addAll(Arrays.asList(interceptors));</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 处理引介通知，类级别增强</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (advisor <span class="keyword">instanceof</span> IntroductionAdvisor) &#123;</span><br><span class="line">                IntroductionAdvisor ia = (IntroductionAdvisor) advisor;</span><br><span class="line">                <span class="keyword">if</span> (config.isPreFiltered() || ia.getClassFilter().matches(actualClass)) &#123;</span><br><span class="line">                    <span class="comment">// 通过registry取得拦截器</span></span><br><span class="line">                    Interceptor[] interceptors = registry.getInterceptors(advisor);</span><br><span class="line">                    interceptorList.addAll(Arrays.asList(interceptors));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">// 通过registry取得拦截器</span></span><br><span class="line">                Interceptor[] interceptors = registry.getInterceptors(advisor);</span><br><span class="line">                interceptorList.addAll(Arrays.asList(interceptors));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> interceptorList;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码中最终返回了一个方法拦截器的列表，在这个过程中，多次调用了AdvisorAdapterRegistry的getInterceptors(advisor)方法，下面深入到AdvisorAdapterRegistry接口的实现类DefaultAdvisorAdapterRegistry中看一看具体实现：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultAdvisorAdapterRegistry</span> <span class="keyword">implements</span> <span class="title">AdvisorAdapterRegistry</span>, <span class="title">Serializable</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> List&lt;AdvisorAdapter&gt; adapters = <span class="keyword">new</span> ArrayList&lt;&gt;(<span class="number">3</span>);</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DefaultAdvisorAdapterRegistry</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        registerAdvisorAdapter(<span class="keyword">new</span> MethodBeforeAdviceAdapter());</span><br><span class="line">        registerAdvisorAdapter(<span class="keyword">new</span> AfterReturningAdviceAdapter());</span><br><span class="line">        registerAdvisorAdapter(<span class="keyword">new</span> ThrowsAdviceAdapter());</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Advisor <span class="title">wrap</span><span class="params">(Object adviceObject)</span> <span class="keyword">throws</span> UnknownAdviceTypeException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (adviceObject <span class="keyword">instanceof</span> Advisor) &#123;</span><br><span class="line">            <span class="keyword">return</span> (Advisor) adviceObject;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!(adviceObject <span class="keyword">instanceof</span> Advice)) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> UnknownAdviceTypeException(adviceObject);</span><br><span class="line">        &#125;</span><br><span class="line">        Advice advice = (Advice) adviceObject;</span><br><span class="line">        <span class="keyword">if</span> (advice <span class="keyword">instanceof</span> MethodInterceptor) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> DefaultPointcutAdvisor(advice);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (AdvisorAdapter adapter : <span class="keyword">this</span>.adapters) &#123;</span><br><span class="line">            <span class="keyword">if</span> (adapter.supportsAdvice(advice)) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> DefaultPointcutAdvisor(advice);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> UnknownAdviceTypeException(advice);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取拦截器</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> MethodInterceptor[] getInterceptors(Advisor advisor) <span class="keyword">throws</span> UnknownAdviceTypeException &#123;</span><br><span class="line">        List&lt;MethodInterceptor&gt; interceptors = <span class="keyword">new</span> ArrayList&lt;&gt;(<span class="number">3</span>);</span><br><span class="line">        Advice advice = advisor.getAdvice();</span><br><span class="line">        <span class="keyword">if</span> (advice <span class="keyword">instanceof</span> MethodInterceptor) &#123;</span><br><span class="line">            interceptors.add((MethodInterceptor) advice);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (AdvisorAdapter adapter : <span class="keyword">this</span>.adapters) &#123;</span><br><span class="line">            <span class="comment">// 判断通知是否可被适配器理解</span></span><br><span class="line">            <span class="comment">// 实际上是对advice类型的判断，如AfterReturningAdvice等</span></span><br><span class="line">            <span class="keyword">if</span> (adapter.supportsAdvice(advice)) &#123;</span><br><span class="line">                interceptors.add(adapter.getInterceptor(advisor));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (interceptors.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> UnknownAdviceTypeException(advisor.getAdvice());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> interceptors.toArray(<span class="keyword">new</span> MethodInterceptor[<span class="number">0</span>]);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 注册通知适配器</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">registerAdvisorAdapter</span><span class="params">(AdvisorAdapter adapter)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.adapters.add(adapter);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>到这里，拦截器链就构造完成了，在这个过程中，通过适配器的支持，构造了不同的拦截器，在JdkDynamicAopProxy进行回调时则会根据配置的通知执行相应的拦截器链，从而达到增强目标对象的功能。</p>
+<p>Spring的AOP模块是一个复杂的模块，这里仅仅简要分析了通过代理对象增强目标对象的原理和过程，还有更多的知识需要在实践中不断学习。</p>
+<p>参考资料：《Spring技术内幕》</p>
+<p><strong>最后的最后，安利一下自己写的一个Java代码生成工具，能够方便的生成Spring、SpringMVC、Mybatis架构下的Java代码，希望能对大家有所帮助，地址：<a href="https://github.com/GreedyStar/generator" target="_blank" rel="noopener">Java代码生成器：Generator</a></strong></p>
+
+      
+      
+
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spring源码/" rel="tag"><i class="fa fa-tag"></i> Spring源码</a>
+          
+            <a href="/tags/AOP/" rel="tag"><i class="fa fa-tag"></i> AOP</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/05/Spring源码/Spring源码学习【六】AOP原理解析（一）代理对象的生成/" rel="next" title="Spring源码学习【六】AOP原理解析（一）代理对象的生成">
+                <i class="fa fa-chevron-left"></i> Spring源码学习【六】AOP原理解析（一）代理对象的生成
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/05/Spring源码/Spring源码学习【七】Web环境中启动和关闭IOC容器/" rel="prev" title="Spring源码学习【七】Web环境中启动和关闭IOC容器">
+                Spring源码学习【七】Web环境中启动和关闭IOC容器 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="一颗贪婪的星">
+            
+              <p class="site-author-name" itemprop="name">一颗贪婪的星</p>
+              <div class="site-description motion-element" itemprop="description">奋飞不辍</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">40</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <center>
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="http://www.greedystar.com" title="WebSite &rarr; http://www.greedystar.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>WebSite</a>
+                  <center>
+                </center></center></span>
+              
+                <span class="links-of-author-item">
+                  <center>
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/GreedyStar" title="GitHub &rarr; https://github.com/GreedyStar" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  <center>
+                </center></center></span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#源码学习"><span class="nav-number">2.</span> <span class="nav-text">源码学习</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">一颗贪婪的星</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'ekKjjiKBuBmHywaHTvrjaaOa-gzGzoHsz',
+    appKey: 'enW5GXtdR68oQVtLhAb65RbB',
+    placeholder: '请务必在上方输入您的邮箱哦，否则您将可能错过作者的回复.',
+    avatar: 'mp',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
