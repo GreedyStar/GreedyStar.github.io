@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+<link href="//cdn.bootcss.com/pace/1.0.2/themes/pink/pace-theme-flash.css" rel="stylesheet">
+<style>
+    .pace .pace-progress {
+        background: #1E92FB; /*进度条颜色*/
+        height: 3px;
+    }
+    .pace .pace-progress-inner {
+         box-shadow: 0 0 10px #1E92FB, 0 0 5px     #1E92FB; /*阴影颜色*/
+    }
+    .pace .pace-activity {
+        border-top-color: #1E92FB;    /*上边框颜色*/
+        border-left-color: #1E92FB;    /*左边框颜色*/
+    }
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.jpg?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.jpg?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.jpg?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.0',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="概述Sentinel是一个以流量为切入点，从流量控制、熔断降级、系统负载保护等多个维度保护服务稳定性的分布式系统流量防控兵。 Sentinel 具有以下特征:  丰富的应用场景：Sentinel 承接了阿里巴巴近 10 年的双十一大促流量的核心场景，例如秒杀（即突发流量控制在系统容量可以承受的范围）、消息削峰填谷、集群流量控制、实时熔断下游不可用应用等。 完备的实时监控：Sentinel 同时提供">
+<meta name="keywords" content="SpringCloudAlibaba,Sentinel">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringCloudAlibaba 入门笔记（四）Sentinel 服务限流降级">
+<meta property="og:url" content="http://b.greedystar.com/2020/06/05/SpringCloudAlibaba/SpringCloudAlibaba 入门笔记（四）Sentinel 服务限流降级/index.html">
+<meta property="og:site_name" content="GreedyStar">
+<meta property="og:description" content="概述Sentinel是一个以流量为切入点，从流量控制、熔断降级、系统负载保护等多个维度保护服务稳定性的分布式系统流量防控兵。 Sentinel 具有以下特征:  丰富的应用场景：Sentinel 承接了阿里巴巴近 10 年的双十一大促流量的核心场景，例如秒杀（即突发流量控制在系统容量可以承受的范围）、消息削峰填谷、集群流量控制、实时熔断下游不可用应用等。 完备的实时监控：Sentinel 同时提供">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://b.greedystar.com/2020/06/05/SpringCloudAlibaba/SpringCloudAlibaba%20入门笔记（四）Sentinel%20服务限流降级/1591237612.jpg">
+<meta property="og:image" content="http://b.greedystar.com/2020/06/05/SpringCloudAlibaba/SpringCloudAlibaba%20入门笔记（四）Sentinel%20服务限流降级/1591237754.jpg">
+<meta property="og:image" content="http://b.greedystar.com/2020/06/05/SpringCloudAlibaba/SpringCloudAlibaba%20入门笔记（四）Sentinel%20服务限流降级/1591238566.jpg">
+<meta property="og:updated_time" content="2020-06-04T06:17:16.264Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SpringCloudAlibaba 入门笔记（四）Sentinel 服务限流降级">
+<meta name="twitter:description" content="概述Sentinel是一个以流量为切入点，从流量控制、熔断降级、系统负载保护等多个维度保护服务稳定性的分布式系统流量防控兵。 Sentinel 具有以下特征:  丰富的应用场景：Sentinel 承接了阿里巴巴近 10 年的双十一大促流量的核心场景，例如秒杀（即突发流量控制在系统容量可以承受的范围）、消息削峰填谷、集群流量控制、实时熔断下游不可用应用等。 完备的实时监控：Sentinel 同时提供">
+<meta name="twitter:image" content="http://b.greedystar.com/2020/06/05/SpringCloudAlibaba/SpringCloudAlibaba%20入门笔记（四）Sentinel%20服务限流降级/1591237612.jpg">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://b.greedystar.com/2020/06/05/SpringCloudAlibaba/SpringCloudAlibaba 入门笔记（四）Sentinel 服务限流降级/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>SpringCloudAlibaba 入门笔记（四）Sentinel 服务限流降级 | GreedyStar</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9886835617b579c8d3f880bfc88bbd0c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">GreedyStar</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">个人博客</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://b.greedystar.com/2020/06/05/SpringCloudAlibaba/SpringCloudAlibaba 入门笔记（四）Sentinel 服务限流降级/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="一颗贪婪的星">
+      <meta itemprop="description" content="奋飞不辍">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="GreedyStar">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h3 class="post-title" itemprop="name headline">SpringCloudAlibaba 入门笔记（四）Sentinel 服务限流降级
+
+              
+            
+          </h3>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-06-05 21:23:21" itemprop="dateCreated datePublished" datetime="2020-06-05T21:23:21+08:00">2020-06-05</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-06-04 14:17:16" itemprop="dateModified" datetime="2020-06-04T14:17:16+08:00">2020-06-04</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/SpringCloudAlibaba/" itemprop="url" rel="index"><span itemprop="name">SpringCloudAlibaba</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/06/05/SpringCloudAlibaba/SpringCloudAlibaba 入门笔记（四）Sentinel 服务限流降级/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/06/05/SpringCloudAlibaba/SpringCloudAlibaba 入门笔记（四）Sentinel 服务限流降级/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+      
+      
+        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a><strong>概述</strong></h1><p>Sentinel是一个以流量为切入点，从流量控制、熔断降级、系统负载保护等多个维度保护服务稳定性的分布式系统流量防控兵。</p>
+<p><strong>Sentinel 具有以下特征</strong>:</p>
+<ul>
+<li><strong>丰富的应用场景</strong>：Sentinel 承接了阿里巴巴近 10 年的双十一大促流量的核心场景，例如秒杀（即突发流量控制在系统容量可以承受的范围）、消息削峰填谷、集群流量控制、实时熔断下游不可用应用等。</li>
+<li><strong>完备的实时监控</strong>：Sentinel 同时提供实时的监控功能。您可以在控制台中看到接入应用的单台机器秒级数据，甚至 500 台以下规模的集群的汇总运行情况。</li>
+<li><strong>广泛的开源生态</strong>：Sentinel 提供开箱即用的与其它开源框架/库的整合模块，例如与 Spring Cloud、Dubbo、gRPC 的整合。您只需要引入相应的依赖并进行简单的配置即可快速地接入 Sentinel。</li>
+<li><strong>完善的 SPI 扩展点</strong>：Sentinel 提供简单易用、完善的 SPI 扩展接口。您可以通过实现扩展接口来快速地定制逻辑。例如定制规则管理、适配动态数据源等。</li>
+</ul>
+<p>注：以上描述摘自 <a href="https://github.com/alibaba/Sentinel/wiki/%E4%BB%8B%E7%BB%8D" target="_blank" rel="noopener">Sentinel官方文档</a></p>
+<p>在本篇中，我们将使用Sentinel对服务进行流量控制、熔断降级以及基于nacos的规则持久化</p>
+<h1 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a><strong>创建项目</strong></h1><p>首先，我们来创建一个 SpringBoot 项目，就起名sentinel-test吧。</p>
+<p>然后，引入如下依赖：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;com.alibaba.cloud&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-cloud-starter-alibaba-sentinel&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<h1 id="流量控制"><a href="#流量控制" class="headerlink" title="流量控制"></a><strong>流量控制</strong></h1><p>项目创建完成后，让我们来测试一下Sentinel的流量控制。在Sentinel中，流量控制是通过抛出BlockException来实现的，我们可以通过@SentinelResource来标记资源和处理异常的方法，共有两种方式：</p>
+<ul>
+<li><strong>在单独类中处理异常</strong>：使用blockHandlerClass来指定处理异常的类，使用blockHandler指定类中处理异常的方法，这个方法必须是一个静态方法，且要求该静态方法的参数列表在被标记的资源基础上，添加一个BlockException，参考后续代码中的/test1</li>
+<li><strong>在本类中处理异常</strong>： 使用blockHandler指定本类中的一个处理异常的方法，要求该静态方法的参数列表在被标记的资源基础上，添加一个BlockException，参考后续代码中的/test2</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * test1</span></span><br><span class="line"><span class="comment">     * 流量控制测试</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;</span></span><br><span class="line"><span class="comment">     * 将对BlockException的处理放入一个单独的ExceptionUtil类中，这种方式要求处理异常的handleTest1方法为静态方法</span></span><br><span class="line"><span class="comment">     * 且要求handleTest1方法的参数列表在被标记资源的基础上，添加一个BlockException</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@GetMapping</span>(value = <span class="string">"/test1"</span>)</span><br><span class="line">    <span class="meta">@SentinelResource</span>(value = <span class="string">"test1"</span>, blockHandler = <span class="string">"handleTest1"</span>, blockHandlerClass = ExceptionUtil.class)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">test1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"请求资源 : test1"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * test2</span></span><br><span class="line"><span class="comment">     * 流量控制测试</span></span><br><span class="line"><span class="comment">     * &lt;p&gt;</span></span><br><span class="line"><span class="comment">     * 将对BlockException的处理放在当前类中</span></span><br><span class="line"><span class="comment">     * </span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@GetMapping</span>(value = <span class="string">"/test2"</span>)</span><br><span class="line">    <span class="meta">@SentinelResource</span>(value = <span class="string">"test2"</span>, blockHandler = <span class="string">"handleTest2"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">test2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"请求资源 : test2"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * BlockException处理函数，参数列表最后多一个 BlockException，其余与原方法一致</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">handleTest2</span><span class="params">(BlockException ex)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 进行一些日志处理</span></span><br><span class="line">        ex.printStackTrace();</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"流量控制 : test2"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面，我们来设定具体的流量控制规则，流控规则也是以资源为切入点的，我们可以通过代码来配置，也可以通过外Sentinel控制台来配置。</p>
+<p><strong>方式一：代码配置</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SentinelTestApplication</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(SentinelTestApplication.class);</span><br><span class="line">        initRules();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 硬编码定义规则</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">initRules</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        List&lt;FlowRule&gt; rules = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        FlowRule rule = <span class="keyword">new</span> FlowRule();</span><br><span class="line">        rule.setResource(<span class="string">"test1"</span>); <span class="comment">// 资源名</span></span><br><span class="line">        rule.setGrade(RuleConstant.FLOW_GRADE_QPS); <span class="comment">// 流控方式，这里通过qps来进行控制</span></span><br><span class="line">        rule.setCount(<span class="number">1</span>); <span class="comment">// 阈值，当qps超过1时进行流量控制</span></span><br><span class="line">        rules.add(rule);</span><br><span class="line">        rule = <span class="keyword">new</span> FlowRule();</span><br><span class="line">        rule.setResource(<span class="string">"test2"</span>);</span><br><span class="line">        rule.setGrade(RuleConstant.FLOW_GRADE_QPS);</span><br><span class="line">        rule.setCount(<span class="number">1</span>);</span><br><span class="line">        rules.add(rule);</span><br><span class="line">        FlowRuleManager.loadRules(rules);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>OK，下面我们启动项目进行测试，让我们疯狂访问/test1和/test2接口，会看到类似下面的提示：</p>
+<p>请求资源 : test1<br>流量控制 : test1<br>流量控制 : test1<br>请求资源 : test1<br>流量控制 : test1<br>流量控制 : test1</p>
+<p>表明流量控制起到了作用，如果我们将流控的阈值设置的比较大，手动刷新时就基本不会出现流量控制的情况了，因为我们的手速并没有那么快。</p>
+<p>当然，流控的规则并不是只有QPS一种，文末会给出一些配置项的具体说明，在这里就不细说了。</p>
+<h1 id="熔断降级"><a href="#熔断降级" class="headerlink" title="熔断降级"></a><strong>熔断降级</strong></h1><p>除了流量控制，Sentinel还提供了熔断降级机制，比如当一个接口频繁出现错误时，Sentinel就会按照配置的降级规则对接口进行降级处理。</p>
+<p>Sentinel的熔断降级是通过DegradeException来实现的，下面我们来模拟一下这种情况。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * test3</span></span><br><span class="line"><span class="comment">     * 测试熔断降级</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@GetMapping</span>(value = <span class="string">"/test3"</span>)</span><br><span class="line">    <span class="meta">@SentinelResource</span>(value = <span class="string">"test3"</span>, fallback = <span class="string">"handleDegrade"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">test3</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">new</span> Random().nextBoolean()) &#123;</span><br><span class="line">            <span class="keyword">int</span> i = <span class="number">1</span> / <span class="number">0</span>; <span class="comment">// 模拟一个业务异常</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"请求资源 : test3"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 熔断降级处理函数</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">handleDegrade</span><span class="params">(Throwable throwable)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (throwable <span class="keyword">instanceof</span> DegradeException) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"服务已被降级 = "</span> + <span class="keyword">new</span> Date();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">"业务出现异常 = "</span> + <span class="keyword">new</span> Date();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面的流量控制中，我们采用了硬编码的方式来定义流控规则，在本小节，我们通过Sentinel Dashboard来配置降级规则。</p>
+<ol>
+<li><p>我们需要去下载 <a href="https://github.com/alibaba/Sentinel/releases" target="_blank" rel="noopener">Sentinel DashBoard</a>，这是一个基于SpringBoot编写的程序，打包成jar包供我们使用。</p>
+</li>
+<li><p>通过命令 <strong>java -Dserver.port=8080 -Dcsp.sentinel.dashboard.server=localhost:8080 -Dproject.name=sentinel-dashboard -jar sentinel-dashboard.jar</strong>启动，端口号可以根据需要去进行修改，我这里改为8899</p>
+</li>
+<li><p>访问localhost:8899就可以看到Sentinel Dashboard了</p>
+</li>
+</ol>
+<p>接下来，我们修改一下项目的配置，在application.yml中进行如下配置：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  application:</span><br><span class="line">    name: sentinel-test</span><br><span class="line">  cloud:</span><br><span class="line">    sentinel:</span><br><span class="line">      transport:</span><br><span class="line">        port: <span class="number">8103</span></span><br><span class="line">        dashboard: localhost:<span class="number">8899</span></span><br></pre></td></tr></table></figure>
+<p>请注意，我们这里配置了一个8103的端口号，sentinel会自动在这个端口启动一个Http服务，并通过这个服务与dashboard进行通信，这样一来，我们在dashboard上添加的降级规则就会被推送到我们的项目中。</p>
+<p>在dashboard中，我们对资源test3新增一条降级规则，这里采用异常比例规则，取值0.1表示当每秒钟出现异常的比例达到十分之一，就对资源降级10秒钟。</p>
+<p><img src="/2020/06/05/SpringCloudAlibaba/SpringCloudAlibaba 入门笔记（四）Sentinel 服务限流降级/1591237612.jpg" alt><br><img src="/2020/06/05/SpringCloudAlibaba/SpringCloudAlibaba 入门笔记（四）Sentinel 服务限流降级/1591237754.jpg" alt></p>
+<p>这里有一个特别注意的点，上图的降级规则中有一项是异常数，这个表示的是1分钟内的异常数，如果我们使用这个规则，且降级时间设定的小于一分钟，那么就有可能出现资源已经超过降级时间窗口，但依然是被降级的状态。</p>
+<p>下面我们启动项目进行测试，让我们疯狂访问/test3，会看到类似下面的提示：</p>
+<p>请求资源 : test3<br>业务出现异常 = Thu Jun 04 10:37:51 CST 2020<br>服务已被降级 = Thu Jun 04 10:37:52 CST 2020<br>服务已被降级 = Thu Jun 04 10:37:53 CST 2020<br>服务已被降级 = Thu Jun 04 10:37:54 CST 2020<br>服务已被降级 = Thu Jun 04 10:37:55 CST 2020</p>
+<p>表明熔断降级起到了作用。</p>
+<h1 id="规则持久化"><a href="#规则持久化" class="headerlink" title="规则持久化"></a><strong>规则持久化</strong></h1><p>虽然通过Sentinel Dashboard来设置规则可以避免硬编码的方式，但Dashboard中的规则是基于内存来存储的，重启后就会消失，而我们希望通过持久化的方式来存储规则。我们就可以借助Nacos配置中心来实现这个目标，关于Nacos的配置和启动这里就不再赘述了。</p>
+<p>首先，添加依赖</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;com.alibaba.csp&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;sentinel-datasource-nacos&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<p>然后修改配置如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  application:</span><br><span class="line">    name: sentinel-test</span><br><span class="line">  cloud:</span><br><span class="line">    sentinel:</span><br><span class="line">      transport:</span><br><span class="line">        port: <span class="number">8103</span></span><br><span class="line">        dashboard: localhost:<span class="number">8899</span></span><br><span class="line">      datasource: <span class="comment"># 持久化sentinel规则</span></span><br><span class="line">        degrade: <span class="comment"># 熔断降级规则数据源配置</span></span><br><span class="line">          nacos:</span><br><span class="line">            server-addr: <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">8848</span></span><br><span class="line">            data-id: sentinel-test-degrade</span><br><span class="line">            group-id: SENTINEL_RULES</span><br><span class="line">            data-type: json</span><br><span class="line">            rule-type: degrade  <span class="comment"># flow,degrade,authority,system, param-flow</span></span><br><span class="line">        flow: <span class="comment"># 流控规则数据源配置</span></span><br><span class="line">          nacos:</span><br><span class="line">            server-addr: <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">8848</span></span><br><span class="line">            data-id: sentinel-test-flow</span><br><span class="line">            group-id: SENTINEL_RULES</span><br><span class="line">            data-type: json</span><br><span class="line">            rule-type: flow</span><br></pre></td></tr></table></figure>
+<p>在Nacos控制台中创建如下所示的配置：</p>
+<p><img src="/2020/06/05/SpringCloudAlibaba/SpringCloudAlibaba 入门笔记（四）Sentinel 服务限流降级/1591238566.jpg" alt></p>
+<p>注意这两个配置都是json格式，内容如下：</p>
+<p>sentinel-test-flow：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">"resource"</span>: <span class="string">"test1"</span>, </span><br><span class="line">        <span class="string">"limitApp"</span>: <span class="string">"default"</span>,</span><br><span class="line">        <span class="string">"grade"</span>: <span class="number">1</span>,</span><br><span class="line">        <span class="string">"count"</span>: <span class="number">2</span>,</span><br><span class="line">        <span class="string">"strategy"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="string">"controlBehavior"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="string">"clusterMode"</span>: <span class="keyword">false</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">"resource"</span>: <span class="string">"test2"</span>, </span><br><span class="line">        <span class="string">"limitApp"</span>: <span class="string">"default"</span>,</span><br><span class="line">        <span class="string">"grade"</span>: <span class="number">1</span>,</span><br><span class="line">        <span class="string">"count"</span>: <span class="number">2</span>,</span><br><span class="line">        <span class="string">"strategy"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="string">"controlBehavior"</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="string">"clusterMode"</span>: <span class="keyword">false</span></span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>sentinel-test-degrade</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">"resource"</span>: <span class="string">"test3"</span>,</span><br><span class="line">        <span class="string">"count"</span>: <span class="number">0.1</span>,</span><br><span class="line">        <span class="string">"timeWindow"</span>: <span class="number">10</span>,</span><br><span class="line">        <span class="string">"grade"</span>: <span class="number">1</span></span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>ok，启动项目后，再次进行测试，我们就会得到和之前测试相同的结果了。</p>
+<p>到这里，关于Sentinel的流控和熔断降级就实验完成了，其实Sentinel提供给我们的功能还远不止这些，其他的热点参数限流、集群限流、网关限流等也都是很实用的流控策略，相信通过本篇的流控和熔断降级的实验，其他策略的使用也不在话下了。</p>
+<p>最后，对一些配置参数进行简单的说明</p>
+<p><strong>FlowRule（流控规则）</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">字段</th>
+<th style="text-align:center">描述</th>
+<th style="text-align:center">默认值 </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">resource</td>
+<td style="text-align:center">资源名</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">limitApp</td>
+<td style="text-align:center">针对的调用来源，若为 default 则不区分调用来源</td>
+<td style="text-align:center">default </td>
+</tr>
+<tr>
+<td style="text-align:center">grade</td>
+<td style="text-align:center">限流阈值类型（QPS或并发线程数）；0代表根据并发数量来限流，1代表根据QPS来进行流量控制</td>
+<td style="text-align:center">QPS模式 </td>
+</tr>
+<tr>
+<td style="text-align:center">count</td>
+<td style="text-align:center">限流阈值</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">strategy</td>
+<td style="text-align:center">调用关系限流策略（0表示调用方直接限流、1表示关联资源限流、2表示链路限流）</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">controlBehavior</td>
+<td style="text-align:center">调用关系限流策略（0表示调用方直接限流、1表示关联资源限流、2表示链路限流）</td>
+<td style="text-align:center">拒绝 </td>
+</tr>
+<tr>
+<td style="text-align:center">clusterMode</td>
+<td style="text-align:center">是否为集群模式</td>
+<td style="text-align:center">clusterMode</td>
+</tr>
+</tbody>
+</table>
+<p><strong>DegradeRule（熔断降级规则）</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">字段</th>
+<th style="text-align:center">描述</th>
+<th style="text-align:center">默认值 </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">resource</td>
+<td style="text-align:center">资源名</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">limitApp</td>
+<td style="text-align:center">针对的调用来源，若为 default 则不区分调用来源</td>
+<td style="text-align:center">default </td>
+</tr>
+<tr>
+<td style="text-align:center">count</td>
+<td style="text-align:center">阈值</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">grade</td>
+<td style="text-align:center">降级模式，根据RT(0) 、每秒异常比例(1)、60s内异常数(2)</td>
+<td style="text-align:center">RT(0) </td>
+</tr>
+<tr>
+<td style="text-align:center">timeWindow</td>
+<td style="text-align:center">降级的时间，单位为秒</td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+<p>源码地址：<a href="https://github.com/GreedyStar/spring-cloud-alibaba-demo" target="_blank" rel="noopener">https://github.com/GreedyStar/spring-cloud-alibaba-demo</a></p>
+<p><strong>最后的最后，安利一下自己写的一个Java代码生成工具，能够方便的生成Spring、SpringMVC、Mybatis架构下的Java代码，希望能对大家有所帮助，地址：<a href="https://github.com/GreedyStar/generator" target="_blank" rel="noopener">Java代码生成器：Generator</a></strong></p>
+
+      
+      
+
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SpringCloudAlibaba/" rel="tag"><i class="fa fa-tag"></i> SpringCloudAlibaba</a>
+          
+            <a href="/tags/Sentinel/" rel="tag"><i class="fa fa-tag"></i> Sentinel</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/04/SpringCloudAlibaba/SpringCloudAlibaba 入门笔记（三）Nacos 配置中心/" rel="next" title="SpringCloudAlibaba 入门笔记（三）Nacos 配置中心">
+                <i class="fa fa-chevron-left"></i> SpringCloudAlibaba 入门笔记（三）Nacos 配置中心
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/06/SpringCloudAlibaba/SpringCloudAlibaba 入门笔记（五）Dubbo RPC/" rel="prev" title="SpringCloudAlibaba 入门笔记（五）Dubbo RPC">
+                SpringCloudAlibaba 入门笔记（五）Dubbo RPC <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="一颗贪婪的星">
+            
+              <p class="site-author-name" itemprop="name">一颗贪婪的星</p>
+              <div class="site-description motion-element" itemprop="description">奋飞不辍</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">46</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">43</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <center>
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="http://www.greedystar.com" title="WebSite &rarr; http://www.greedystar.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>WebSite</a>
+                  <center>
+                </center></center></span>
+              
+                <span class="links-of-author-item">
+                  <center>
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/GreedyStar" title="GitHub &rarr; https://github.com/GreedyStar" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  <center>
+                </center></center></span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#创建项目"><span class="nav-number">2.</span> <span class="nav-text">创建项目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#流量控制"><span class="nav-number">3.</span> <span class="nav-text">流量控制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#熔断降级"><span class="nav-number">4.</span> <span class="nav-text">熔断降级</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#规则持久化"><span class="nav-number">5.</span> <span class="nav-text">规则持久化</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">一颗贪婪的星</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'ekKjjiKBuBmHywaHTvrjaaOa-gzGzoHsz',
+    appKey: 'enW5GXtdR68oQVtLhAb65RbB',
+    placeholder: '请务必在上方输入您的邮箱哦，否则您将可能错过作者的回复.',
+    avatar: 'mp',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
