@@ -559,12 +559,12 @@
 </li>
 </ul>
 <h1 id="为chaincode指定背书策略"><a href="#为chaincode指定背书策略" class="headerlink" title="为chaincode指定背书策略"></a><strong>为chaincode指定背书策略</strong></h1><p>如果在实例化chaincode时未指定背书策略，则背书策略默为“由通道中的组织的任何一个成员进行背书”。例如，一个带有“Org1”和“Org2”的通道将有一个默认的背书策略：OR（“Org1.成员”，“Org.成员”）。</p>
-<figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">命令：peerchaincode <span class="built_in">instantiate</span> -C &lt;channelid&gt; -n mycc -P <span class="string">"AND('Org1.peer','Org2.peer')"</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">命令：peerchaincode instantiate -C &lt;channelid&gt; -n mycc -P &quot;AND(&apos;Org1.peer&apos;,&apos;Org2.peer&apos;)&quot;</span><br></pre></td></tr></table></figure>
 <p>实例化chaincode后添加到通道中的新组织，可以查询chaincode，但将无法提交由其背书的事务。必须修改背书策略，来让由新加入的组织背书的交易得到认可。</p>
 <h1 id="背书策略的验证过程"><a href="#背书策略的验证过程" class="headerlink" title="背书策略的验证过程"></a><strong>背书策略的验证过程</strong></h1><ol>
 <li>客户端（SDK）把交易提议（TX Proposal）发给指定的一个或多个背书节点(endorsing peer)。 接收提议的背书节点在SDK的交易提议请求中指定，最终进行背书的节点由交易所属的ChainCode和该Chaincode所定义的背书策略（Endorsement Policy）共同决定。</li>
 </ol>
-<p>例如node.js sdk的交易提议请求接口：<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Channel. sendTransactionProposal(request, <span class="keyword">timeout</span>)</span><br></pre></td></tr></table></figure></p>
+<p>例如node.js sdk的交易提议请求接口：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Channel. sendTransactionProposal(request, timeout)</span><br></pre></td></tr></table></figure></p>
 <p>request是一个ChaincodeInvokeRequest对象，可以在该对象中指定目标节点，如果未指定，则会将交易提议请求发送给加入该通道的所有节点。</p>
 <ol start="2">
 <li><p>背书节点收到交易提议后，首先用客户端（SDK）的公钥验证它的签名、客户端是否可以在该channel进行操作、交易是否已被提交、交易提议组织是否正确。验证通过后模拟执行chaincode（不会将结果写入到账本里），将执行的结果反馈给客户端。</p>

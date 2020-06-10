@@ -121,7 +121,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://b.greedystar.com/2020/05/17/SpringCloud/SpringCloud%20入门笔记（四）Ribbon客户端负载均衡器/20190403155006220.png">
 <meta property="og:image" content="http://b.greedystar.com/2020/05/17/SpringCloud/SpringCloud%20入门笔记（四）Ribbon客户端负载均衡器/20190403155634566.png">
-<meta property="og:updated_time" content="2020-05-19T13:02:50.061Z">
+<meta property="og:updated_time" content="2020-06-10T13:02:28.287Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringCloud 入门笔记（四）Ribbon客户端负载均衡器">
 <meta name="twitter:description" content="概述在微服务架构的系统中，为防止单点故障，一个微服务通常会有多个实例，当服务间进行调用时，需要在多个服务实例间进行负载均衡，Ribbon即为一个常用的客户端负载均衡组件。 Ribbon提供了多种负载均衡规则，如：  RoundRobinRule：轮询规则，默认规则 AvailabilityFilteringRule：排除处于断路和并发连接数过大的服务，其余服务采用轮询规则 WeightedResp">
@@ -462,7 +462,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-05-19 21:02:50" itemprop="dateModified" datetime="2020-05-19T21:02:50+08:00">2020-05-19</time>
+                <time title="修改时间：2020-06-10 21:02:28" itemprop="dateModified" datetime="2020-06-10T21:02:28+08:00">2020-06-10</time>
               
             
           </span>
@@ -550,26 +550,17 @@
 <p>本篇中，拟采用一个user-ms实例作为服务调用者，两个role-ms实例作为服务提供者，在user-ms设置Ribbon负载均衡规则。</p>
 <h1 id="配置Ribbon"><a href="#配置Ribbon" class="headerlink" title="配置Ribbon"></a><strong>配置Ribbon</strong></h1><p>Ribbon的配置有多种方式，分别对应不同粒度的配置。</p>
 <h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a><strong>配置文件</strong></h2><p>在user-ms的application.yml配置文件中添加如下配置：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">role-ms:</span><br><span class="line">  ribbon:</span><br><span class="line">    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule</span><br></pre></td></tr></table></figure>
-<p>表示 user-ms 在调用 role-ms 提供的服务时，使用随机均衡的规则。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">role-ms:</span></span><br><span class="line"><span class="attr">  ribbon:</span></span><br><span class="line"><span class="attr">    NFLoadBalancerRuleClassName:</span> <span class="string">com.netflix.loadbalancer.RandomRule</span></span><br></pre></td></tr></table></figure>
+<p>表示 user-ms 在调用 role-ms 提供的服务时，使用随机均衡的规则，这样就可以实现服务级别的负载均衡。</p>
 <h2 id="全局配置类"><a href="#全局配置类" class="headerlink" title="全局配置类"></a><strong>全局配置类</strong></h2><p>在 SpringBoot 所在的包路径下创建一个 Ribbon 的配置类，如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RibbonConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> IRule <span class="title">ribbonRule</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> RandomRule(); <span class="comment">// 负载均衡规则改为随机</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>user-ms启动时，SpringBoot会扫描到这个配置类，将RandomRule规则作为user-ms的全局负载均衡规则，无论user-ms访问哪个服务提供者都，都使用该负载均衡规则。</p>
-<h2 id="服务级配置类"><a href="#服务级配置类" class="headerlink" title="服务级配置类"></a><strong>服务级配置类</strong></h2><p>定义@ExcludeComponent注解，用于标注那些不希望SpringBoot扫描的类，如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> ExcludeComponent &#123;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>修改BibbonConfig配置类，添加@ExcludeComponent注解，如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@ExcludeComponent</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RibbonConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> IRule <span class="title">ribbonRule</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> RandomRule(); <span class="comment">// 负载均衡规则改为随机</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>定义RibbonClient配置类，为特定的微服务指定Ribbon配置，如下所示，为role-ms指定RibbonConfig配置类：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@RibbonClient</span>(name = <span class="string">"role-ms"</span>, configuration = RibbonConfig.class)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RoleMSConfig</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>修改SpringBoot启动类，排除对@ExcludeComponent注解类的扫描，如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableEurekaClient</span></span><br><span class="line"><span class="meta">@EnableFeignClients</span></span><br><span class="line"><span class="meta">@ComponentScan</span>(excludeFilters = <span class="meta">@ComponentScan</span>.Filter(type = FilterType.ANNOTATION, value = &#123;ExcludeComponent.class&#125;))</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserMsApplication</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(UserMsApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这样，服务级的配置类就完成了，当然我们也可以自定义Ribbon的负载均衡规则，对不同的服务采用不同的规则。</p>
 <h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a><strong>测试</strong></h1><p>启动role-ms:8801和role-ms:8802两个服务实例，通过user-ms访问role-ms服务，服务注册中心如下图所示：</p>
 <p><img src="/2020/05/17/SpringCloud/SpringCloud 入门笔记（四）Ribbon客户端负载均衡器/20190403155006220.png" alt></p>
 <p>在user-ms访问12次，负载均衡结果如下：</p>
 <p><img src="/2020/05/17/SpringCloud/SpringCloud 入门笔记（四）Ribbon客户端负载均衡器/20190403155634566.png" alt></p>
 <p>可见服务调用请求已经随机均衡至role-ms:8801和role-ms:8802两个实例中。</p>
-<p>源码地址：<a href="https://github.com/GreedyStar/yogurt" target="_blank" rel="noopener">https://github.com/GreedyStar/yogurt</a></p>
+<p>源码地址：<a href="https://github.com/GreedyStar/spring-cloud-demo" target="_blank" rel="noopener">https://github.com/GreedyStar/spring-cloud-demo</a></p>
 <p><strong>最后的最后，安利一下自己写的一个Java代码生成工具，能够方便的生成Spring、SpringMVC、Mybatis架构下的Java代码，希望能对大家有所帮助，地址：<a href="https://github.com/GreedyStar/generator" target="_blank" rel="noopener">Java代码生成器：Generator</a></strong></p>
 
       
@@ -906,7 +897,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置Ribbon"><span class="nav-number">2.</span> <span class="nav-text">配置Ribbon</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#配置文件"><span class="nav-number">2.1.</span> <span class="nav-text">配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#全局配置类"><span class="nav-number">2.2.</span> <span class="nav-text">全局配置类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务级配置类"><span class="nav-number">2.3.</span> <span class="nav-text">服务级配置类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#测试"><span class="nav-number">3.</span> <span class="nav-text">测试</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置Ribbon"><span class="nav-number">2.</span> <span class="nav-text">配置Ribbon</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#配置文件"><span class="nav-number">2.1.</span> <span class="nav-text">配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#全局配置类"><span class="nav-number">2.2.</span> <span class="nav-text">全局配置类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#测试"><span class="nav-number">3.</span> <span class="nav-text">测试</span></a></li></ol></div>
             
 
           </div>

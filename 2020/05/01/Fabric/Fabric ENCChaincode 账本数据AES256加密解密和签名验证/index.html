@@ -561,98 +561,98 @@
 <p><img src="/2020/05/01/Fabric/Fabric ENCChaincode 账本数据AES256加密解密和签名验证/20180607093954548.png" alt></p>
 <p>ENCChaincode使用了CBC（密码分解连接）模式。</p>
 <h1 id="源码解读"><a href="#源码解读" class="headerlink" title="源码解读"></a><strong>源码解读</strong></h1><p><strong>ENCKEY</strong>和<strong>DECKEY</strong>：用于分组对称加密和解密</p>
-<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">命令 openssl rand -<span class="keyword">base64 </span><span class="number">32</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">命令 openssl rand -base64 32</span><br></pre></td></tr></table></figure>
 <p>ENCKEY=DECKEY=’hJM2KYj33vBq/+3GGybwyFB3chOkNo4lv1swAEMxC3E=’</p>
 <p>IV：加密过程中使用的向量，ENCCC例子使用了CBC模式，IV需要提供给链码，若不提供则会随机生成，但如果背书策略指定需要由多个节点进行背书，那么就必须提供唯一的IV，否则节点在背书时会出现读写冲突。</p>
-<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">命令 opensslrand -<span class="keyword">base64 </span><span class="number">16</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">命令 opensslrand -base64 16</span><br></pre></td></tr></table></figure>
 <p>IV=’ST56TUR9CYY+NZ41sorYVg==’</p>
 <p><strong>SIGKEY</strong>和<strong>VERKEY</strong>：用于签名和验证</p>
-<figure class="highlight coq"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">命令 openssl ecparam -nameprime256v1 -genkey | <span class="type">tail</span> -n5 | <span class="type">base64</span> -w0</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">命令 openssl ecparam -nameprime256v1 -genkey | tail -n5 | base64 -w0</span><br></pre></td></tr></table></figure>
 <p>SIGKEY=VERKEY=’LS0tLS1CRUdJTiBFQyBQUklWQVRFIEtFWS0tLS0tCk1IY0NBUUVFSUtKRzhzMnlqNzJEcGo3L0o1OHFHQzdHa1R5cXQ1REkwZWJod01GamkxMVZvQW9HQ0NxR1NNNDkKQXdFSG9VUURRZ0FFMWlEOUlyU1Ixdi9LOVN6TzVCSjVaUUpIZVdTblIxbE00b21iRTBwZ0NpUml6ZExtZkkyVgp6VE84ZE5PTHNhYlhCZGZyNHJUWDNhSkxzeHE5azBZUm1nPT0KLS0tLS1FTkQgRUMgUFJJVkFURSBLRVktLS0tLQo=’</p>
 <p>链码源文件：fabric/example/chaincode/go/enccc_example/enccc_example.go</p>
 <h2 id="Encrypter"><a href="#Encrypter" class="headerlink" title="Encrypter"></a><strong>Encrypter</strong></h2><p>作用：把通过AES256位密钥进行加密的value写入账本</p>
 <p>源码分析：</p>
 <ol>
 <li><p>创建加密实体，参数为：ID，bccp实例，加密密钥encKey，IV（可选参数，若不提供则随机创建）</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ent, err:= entities.NewAES256EncrypterEntity(<span class="string">"ID"</span>, t<span class="selector-class">.bccspInst</span>, encKey, IV)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ent, err:= entities.NewAES256EncrypterEntity(&quot;ID&quot;, t.bccspInst, encKey, IV)</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>加密和写入数据</p>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">err</span>= encryptAndPutState(stub, ent, key, cleartextValue)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">err= encryptAndPutState(stub, ent, key, cleartextValue)</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>2.1 加密和写入数据<br><figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ciphertext,</span> err := ent.Encrypt(cleartextValue)</span><br></pre></td></tr></table></figure></p>
-<p>2.2 将加密后的value写入账本<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">stub</span><span class="selector-class">.PutState</span>(<span class="selector-tag">key</span>, <span class="selector-tag">ciphertext</span>)</span><br></pre></td></tr></table></figure></p>
+<p>2.1 加密和写入数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ciphertext, err := ent.Encrypt(cleartextValue)</span><br></pre></td></tr></table></figure></p>
+<p>2.2 将加密后的value写入账本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stub.PutState(key, ciphertext)</span><br></pre></td></tr></table></figure></p>
 <h2 id="Decrypter"><a href="#Decrypter" class="headerlink" title="Decrypter"></a><strong>Decrypter</strong></h2><p>作用：将账本value读出并通过AES256位密钥进行解密。</p>
 <p>源码分析：</p>
 <ol>
 <li>创建加密实体，参数为：ID，bccp实例，加密密钥encKey，IV（可选参数，此处示例readme文档中描述：若不提供则随机创建，但与IV的数据结构描述不符）</li>
 </ol>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ent, err:= entities.NewAES256EncrypterEntity(<span class="string">"ID"</span>, t<span class="selector-class">.bccspInst</span>, encKey, IV)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ent, err:= entities.NewAES256EncrypterEntity(&quot;ID&quot;, t.bccspInst, encKey, IV)</span><br></pre></td></tr></table></figure>
 <ol start="2">
 <li>读取和解密</li>
 </ol>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">err</span>= getStateAndDecrypt (stub, ent, key, cleartextValue)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">err= getStateAndDecrypt (stub, ent, key, cleartextValue)</span><br></pre></td></tr></table></figure>
 <p>2.1 读出key对应的value</p>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ciphertext,</span> err := stub.GetState(key)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ciphertext, err := stub.GetState(key)</span><br></pre></td></tr></table></figure>
 <p>2.2 对value进行解密</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">ent</span><span class="selector-class">.Decrypt</span>(<span class="selector-tag">ciphertext</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ent.Decrypt(ciphertext)</span><br></pre></td></tr></table></figure>
 <h2 id="EncrypterSigner"><a href="#EncrypterSigner" class="headerlink" title="EncrypterSigner"></a><strong>EncrypterSigner</strong></h2><p>作用：对value使用AES256位密钥进行加密和prime256v1标准进行签名，并将value写入账本。</p>
 <p>源码分析：</p>
 <ol>
 <li>创建加密签名实体，参数为：ID，bccp实例，加密密钥encKey，签名密钥sigKey</li>
 </ol>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ent, err:= entities.NewAES256EncrypterECDSASignerEntity(<span class="string">"ID"</span>, t<span class="selector-class">.bccspInst</span>,encKey, sigKey)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ent, err:= entities.NewAES256EncrypterECDSASignerEntity(&quot;ID&quot;, t.bccspInst,encKey, sigKey)</span><br></pre></td></tr></table></figure>
 <ol start="2">
 <li>对签名数据加密，写入账本</li>
 </ol>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">err</span>= signEncryptAndPutState(stub, ent, key, cleartextValue)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">err= signEncryptAndPutState(stub, ent, key, cleartextValue)</span><br></pre></td></tr></table></figure>
 <p>2.1 创建一个签名消息，value作为Payload，加密签名实体的ID作为ID，签名消息数据结构如下图所示：</p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">msg :</span>= &amp;entities.SignedMessage&#123;<span class="string">Payload:</span> value,<span class="string">ID:</span> []<span class="keyword">byte</span>(ent.ID())&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msg := &amp;entities.SignedMessage&#123;Payload: value,ID: []byte(ent.ID())&#125;</span><br></pre></td></tr></table></figure>
 <p><img src="/2020/05/01/Fabric/Fabric ENCChaincode 账本数据AES256加密解密和签名验证/20180607094658567.png" alt></p>
 <p>2.2 利用加密签名实体对SignedMessage进行签名，签名后的信息作为签名消息的Sig字段</p>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">err := msg.Sign(ent)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">err := msg.Sign(ent)</span><br></pre></td></tr></table></figure>
 <p>2.3 序列化SignedMessage</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">b</span>, err := msg.ToBytes()</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b, err := msg.ToBytes()</span><br></pre></td></tr></table></figure>
 <p>2.4 对序列化的签名信息进行加密并写入账本</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">encryptAndPutState</span><span class="params">(stub, ent, key, b)</span></span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">encryptAndPutState(stub, ent, key, b)</span><br></pre></td></tr></table></figure>
 <h2 id="DecrypterVerify"><a href="#DecrypterVerify" class="headerlink" title="DecrypterVerify"></a><strong>DecrypterVerify</strong></h2><p>作用：从账本中读取数据，使用AES256位密钥进行解密和prime256v1标准验证签名。</p>
 <p>源码分析：</p>
 <ol>
 <li>创建加密签名实体，参数为：ID，bccp实例，加密密钥encKey，签名密钥sigKey</li>
 </ol>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ent, err:= entities.NewAES256EncrypterECDSASignerEntity(<span class="string">"ID"</span>, t<span class="selector-class">.bccspInst</span>,encKey, sigKey)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ent, err:= entities.NewAES256EncrypterECDSASignerEntity(&quot;ID&quot;, t.bccspInst,encKey, sigKey)</span><br></pre></td></tr></table></figure>
 <ol start="2">
 <li>读取数据，解密并验证签名</li>
 </ol>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cleartextValue,</span> err :=getStateDecryptAndVerify(stub, ent, key)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cleartextValue, err :=getStateDecryptAndVerify(stub, ent, key)</span><br></pre></td></tr></table></figure>
 <p>2.1 读取账本数据并解密</p>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">val,</span> err := getStateAndDecrypt(stub, ent, key)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">val, err := getStateAndDecrypt(stub, ent, key)</span><br></pre></td></tr></table></figure>
 <p>2.2 创建SignedMessage对象msg</p>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msg := &amp;entities.SignedMessage&#123;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msg := &amp;entities.SignedMessage&#123;&#125;</span><br></pre></td></tr></table></figure>
 <p>将序列化的val解码至msg中</p>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">err</span> = msg.FromBytes(val)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">err = msg.FromBytes(val)</span><br></pre></td></tr></table></figure>
 <p>2.3 验证签名</p>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ok,</span> err := msg.Verify(ent)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ok, err := msg.Verify(ent)</span><br></pre></td></tr></table></figure>
 <h1 id="链码测试"><a href="#链码测试" class="headerlink" title="链码测试"></a><strong>链码测试</strong></h1><p>使用e2e_cli示例网络结构：一个orderer节点，分属两个Org的四个peer节点。</p>
 <p>修改了script.sh脚本，在所有peer节点安装、实例化ENCCC（ENC Chaincode）</p>
 <p>测试过程中的ENCKEY、DECKEY、DECKEY1、IV、SIGKEY、VERKEY、VERKEY1已经设置为cli容器的环境变量</p>
 <h2 id="Test1：验证加密解密"><a href="#Test1：验证加密解密" class="headerlink" title="Test1：验证加密解密"></a><strong>Test1：验证加密解密</strong></h2><p><strong>使用ENCKEY将value写入账本：</strong></p>
-<figure class="highlight cos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">peerchaincode invoke -o orderer.example.com:<span class="number">7050</span> --tls --cafile <span class="built_in">$ORDERER</span>_CA -C <span class="built_in">$CHANNEL</span>_NAME -n enccc -c'&#123;<span class="string">"Args"</span>:[<span class="string">"ENCRYPT"</span>,<span class="string">"a"</span>,<span class="string">"100"</span>]&#125;'--transient<span class="string">"&#123;\"</span>ENCKEY\<span class="string">":\"</span><span class="built_in">$ENCKEY</span>\<span class="string">",\"</span>IV\<span class="string">":\"</span><span class="built_in">$IV</span>\<span class="string">"&#125;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">peerchaincode invoke -o orderer.example.com:7050 --tls --cafile $ORDERER_CA -C $CHANNEL_NAME -n enccc -c&apos;&#123;&quot;Args&quot;:[&quot;ENCRYPT&quot;,&quot;a&quot;,&quot;100&quot;]&#125;&apos;--transient&quot;&#123;\&quot;ENCKEY\&quot;:\&quot;$ENCKEY\&quot;,\&quot;IV\&quot;:\&quot;$IV\&quot;&#125;</span><br></pre></td></tr></table></figure>
 <p>结果：数据可正确加密写入</p>
 <p><strong>使用DECKEY读取value：</strong></p>
-<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">peer chaincode <span class="keyword">query</span> -C <span class="variable">$CHANNEL_NAME</span> -<span class="keyword">n</span> enccc -c '&#123;<span class="string">"Args"</span>:[<span class="string">"DECRYPT"</span>,<span class="string">"a"</span>]&#125;' --transient <span class="string">"&#123;\"</span>DECKEY\<span class="string">":\"</span><span class="variable">$DECKEY</span>\<span class="string">"&#125;"</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">peer chaincode query -C $CHANNEL_NAME -n enccc -c &apos;&#123;&quot;Args&quot;:[&quot;DECRYPT&quot;,&quot;a&quot;]&#125;&apos; --transient &quot;&#123;\&quot;DECKEY\&quot;:\&quot;$DECKEY\&quot;&#125;&quot;</span><br></pre></td></tr></table></figure>
 <p>结果：数据正确读出并解密</p>
 <p><strong>使用DECKEY1读取value：</strong></p>
-<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">peer chaincode <span class="keyword">query</span> -C <span class="variable">$CHANNEL_NAME</span> -<span class="keyword">n</span> enccc -c '&#123;<span class="string">"Args"</span>:[<span class="string">"DECRYPT"</span>,<span class="string">"a"</span>]&#125;' --transient <span class="string">"&#123;\"</span>DECKEY\<span class="string">":\"</span><span class="variable">$DECKEY1</span>\<span class="string">"&#125;"</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">peer chaincode query -C $CHANNEL_NAME -n enccc -c &apos;&#123;&quot;Args&quot;:[&quot;DECRYPT&quot;,&quot;a&quot;]&#125;&apos; --transient &quot;&#123;\&quot;DECKEY\&quot;:\&quot;$DECKEY1\&quot;&#125;&quot;</span><br></pre></td></tr></table></figure>
 <p>结果：由于DECKEY1 not equal ENCKEY，导致解密失败</p>
 <h2 id="Test2：验证签名验证"><a href="#Test2：验证签名验证" class="headerlink" title="Test2：验证签名验证"></a><strong>Test2：验证签名验证</strong></h2><p><strong>使用ENCKEY和SIGKEY将value写入账本：</strong></p>
-<figure class="highlight cos"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">peer chaincode invoke -o orderer.example.com:<span class="number">7050</span>  --tls --cafile <span class="built_in">$ORDERER</span>_CA -C <span class="built_in">$CHANNEL</span>_NAME -n enccc -c '&#123;<span class="string">"Args"</span>:[<span class="string">"ENCRYPTSIGN"</span>,<span class="string">"b"</span>,<span class="string">"200"</span>]&#125;' --transient <span class="string">"&#123;\"</span>ENCKEY\<span class="string">":\"</span><span class="built_in">$ENCKEY</span>\<span class="string">",\"</span>SIGKEY\<span class="string">":\"</span><span class="built_in">$SIGKEY</span>\<span class="string">"&#125;"</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">peer chaincode invoke -o orderer.example.com:7050  --tls --cafile $ORDERER_CA -C $CHANNEL_NAME -n enccc -c &apos;&#123;&quot;Args&quot;:[&quot;ENCRYPTSIGN&quot;,&quot;b&quot;,&quot;200&quot;]&#125;&apos; --transient &quot;&#123;\&quot;ENCKEY\&quot;:\&quot;$ENCKEY\&quot;,\&quot;SIGKEY\&quot;:\&quot;$SIGKEY\&quot;&#125;&quot;</span><br></pre></td></tr></table></figure>
 <p>结果：数据正确签名加密，写入账本</p>
 <p><strong>使用ENCKEY和VERKEY读取value：</strong></p>
-<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">peer chaincode <span class="keyword">query</span> -C <span class="variable">$CHANNEL_NAME</span> -<span class="keyword">n</span> enccc -c '&#123;<span class="string">"Args"</span>:[<span class="string">"DECRYPTVERIFY"</span>,<span class="string">"b"</span>]&#125;' --transient <span class="string">"&#123;\"</span>DECKEY\<span class="string">":\"</span><span class="variable">$DECKEY</span>\<span class="string">",\"</span>VERKEY\<span class="string">":\"</span><span class="variable">$VERKEY</span>\<span class="string">"&#125;"</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">peer chaincode query -C $CHANNEL_NAME -n enccc -c &apos;&#123;&quot;Args&quot;:[&quot;DECRYPTVERIFY&quot;,&quot;b&quot;]&#125;&apos; --transient &quot;&#123;\&quot;DECKEY\&quot;:\&quot;$DECKEY\&quot;,\&quot;VERKEY\&quot;:\&quot;$VERKEY\&quot;&#125;&quot;</span><br></pre></td></tr></table></figure>
 <p>结果：数据正确读出并解密，验证签名通过</p>
 <p><strong>使用ENCKEY和VERKEY1读取value：</strong></p>
-<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">peer chaincode <span class="keyword">query</span> -C <span class="variable">$CHANNEL_NAME</span> -<span class="keyword">n</span> enccc -c '&#123;<span class="string">"Args"</span>:[<span class="string">"DECRYPTVERIFY"</span>,<span class="string">"b"</span>]&#125;' --transient <span class="string">"&#123;\"</span>DECKEY\<span class="string">":\"</span><span class="variable">$DECKEY</span>\<span class="string">",\"</span>VERKEY\<span class="string">":\"</span><span class="variable">$VERKEY1</span>\<span class="string">"&#125;"</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">peer chaincode query -C $CHANNEL_NAME -n enccc -c &apos;&#123;&quot;Args&quot;:[&quot;DECRYPTVERIFY&quot;,&quot;b&quot;]&#125;&apos; --transient &quot;&#123;\&quot;DECKEY\&quot;:\&quot;$DECKEY\&quot;,\&quot;VERKEY\&quot;:\&quot;$VERKEY1\&quot;&#125;&quot;</span><br></pre></td></tr></table></figure>
 <p>结果：数据正确读出并解密，签名验证不通过</p>
 <h2 id="Test3：验证多节点背书情况下IV的使用"><a href="#Test3：验证多节点背书情况下IV的使用" class="headerlink" title="Test3：验证多节点背书情况下IV的使用"></a><strong>Test3：验证多节点背书情况下IV的使用</strong></h2><p>测试组织结构如下：</p>
 <p>Org1：peer0，peer1</p>
